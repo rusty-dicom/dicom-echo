@@ -9,7 +9,7 @@ from typing import Annotated
 import typer
 from rich import print
 
-from echoscu import backend
+from dicom_echo import backend
 
 logger = logging.getLogger(__name__)
 

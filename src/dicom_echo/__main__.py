@@ -2,7 +2,7 @@
 
 import typer
 
-from echoscu import cli
+from dicom_echo import cli
 
 
 def main() -> None:

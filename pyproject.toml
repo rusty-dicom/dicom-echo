@@ -1,16 +1,16 @@
 [build-system]
 build-backend = "maturin"
-
 requires = [ "maturin>=1.7,<2" ]
 
-[tool.poetry]
+[project]
 name = "dicom-echo"
-version = "0.0.0"
 description = "A lightweight, cross-platform, blazingly fast implementation of the C-ECHO DICOM procedure. 🔥"
-authors = [ "Bryant Finney <bryant.finney@outlook.com>" ]
-license = "MIT"
 readme = "README.md"
-packages = [ { include = "echoscu", from = "src" } ]
+license = { file = "LICENSE.md" }
+authors = [
+  { name = "Bryant Finney", email = "bryant.finney@outlook.com" },
+]
+requires-python = ">=3.8.1,<4"
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Developers",
@@ -19,24 +19,29 @@ classifiers = [
   "Intended Audience :: System Administrators",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
+  "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python",
   "Programming Language :: Rust",
   "Topic :: Scientific/Engineering",
   "Topic :: Scientific/Engineering :: Medical Science Apps.",
-  "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
 ]
 
-[tool.poetry.scripts]
-dicom-echo = "echoscu.__main__:main"
+dynamic = [ "version" ]
+dependencies = [ "typer~=0.12.5" ]
+scripts.dicom-echo = "dicom_echo.__main__:main"
+
+[tool.poetry]
+name = "dicom-echo"
+version = "0.0.0"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
@@ -62,31 +67,13 @@ pre-commit = [
 [tool.poetry-dynamic-versioning]
 # url: https://github.com/mtkennerly/poetry-dynamic-versioning?tab=readme-ov-file#configuration
 enable = true
-# in plain english:
-#   1. is the current commit tagged?
-#      - if yes, convert the tag to PEP-440 format
-#   2. is the most recent tag for a pre-release (ends with '-(a|b|rc)N', where N is a number)?
-#      - if yes, increment the pre-release number N by the number of commits since the last tag
-#   3. otherwise (i.e. the current commit is not tagged, and the latest tag is not a
-#      pre-release)...
-#      - add a .postN suffix, where N is the number of commits since the tag
-#
-# in all cases, append '.dirty' to the version metadata if there are uncommitted changes to the repo
-format-jinja = """
-  {%- if distance == 0 -%}
-    {{ serialize_pep440(base, stage, revision, metadata=["dirty"] if dirty else []) }}
-  {%- elif revision is not none -%}
-    {{ serialize_pep440(base, stage, revision + distance, metadata=[commit] + (["dirty"] if dirty else [])) }}
-  {%- else -%}
-    {{ serialize_pep440(base, stage, revision, post=distance, metadata=[commit] + (["dirty"] if dirty else [])) }}
-  {%- endif -%}
-"""
 strict = true
-style = "pep440"
+# note: use semver over pep440 for compatibility with Cargo
+style = "semver"
 vcs = "git"
 
 [tool.poetry-dynamic-versioning.substitution]
-files = [ "*.py", "**/__init__.py", "*/__version__.py", "*/_version.py", "rust/Cargo.toml" ]
+files = [ "*.py", "**/__init__.py", "*/__version__.py", "*/_version.py", "backend/Cargo.toml" ]
 patterns = [
   """(^__version__\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""",
   """(^version\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""",
@@ -94,10 +81,11 @@ patterns = [
 ]
 
 [tool.maturin]
+# url: https://www.maturin.rs/config
 features = [ "pyo3/extension-module" ]
-manifest-path = "rust/Cargo.toml"
-module-name = "echoscu.backend"
-python-packages = [ "echoscu" ]
+manifest-path = "backend/Cargo.toml"
+module-name = "dicom_echo.backend"
+python-packages = [ "dicom_echo" ]
 python-source = "src"
 
 [tool.ruff]
@@ -611,19 +599,17 @@ strict = [ "echoscu" ]
 typeCheckingMode = "strict"
 
 [tool.poe]
-# https://github.com/nat-n/poethepoet
+# url: https://github.com/nat-n/poethepoet
 poetry_command = ""
+
+[tool.poe.poetry_hooks]
+# url: https://poethepoet.natn.io/poetry_plugin.html#hooking-into-poetry-commands
+post_build = "maturin-build"
+post_install = "maturin-develop"
+post_publish = "maturin-upload"
 
 [tool.poe.tasks]
 _version.cmd = "poetry version --short"
-
-[tool.poe.tasks.develop]
-help = "Build and install this package (with dependencies) in development mode"
-default_item_type = "shell"
-sequence = [
-  "poetry install",
-  "maturin develop --skip-install",
-]
 
 [tool.poe.tasks.lint]
 help = "Lint this package"
@@ -639,6 +625,18 @@ sequence = [
   """,
   "safety check --full-report --ignore 70612 --save-html docs/reports",
 ]
+
+[tool.poe.tasks.maturin-build]
+help = "Invoke <c1>maturin build --out dist --sdist</c1> to compile and build this package"
+cmd = "maturin build --out dist --sdist"
+
+[tool.poe.tasks.maturin-develop]
+help = "Install the crate as a module in the poetry-managed virtualenv"
+shell = "maturin develop"
+
+[tool.poe.tasks.maturin-upload]
+help = "Invoke <c1>maturin upload</c1> to publish this package to a PyPI registry"
+cmd = "maturin upload dist/*"
 
 [tool.poe.tasks.setup-versioning]
 help = "Install the 'poetry-dynamic-versioning' plugin to the local 'poetry' installation"
