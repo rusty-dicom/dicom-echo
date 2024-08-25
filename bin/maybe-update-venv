@@ -1,0 +1,26 @@
+#!/bin/sh
+# ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+# Summary: rehash `poetry.lock` to detect changes; install them when necessary
+# Created: 2024-07-28 19:00:47
+# Details: This script was originally part of `.envrc`; it was moved here for less frequent execution by `pre-commit`
+# ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+touch .poetry.lock.md5 # create an empty file if it doesn't exist to protect the following command
+
+if command -v md5sum >/dev/null; then
+  md5sum=md5sum
+else
+  md5sum="md5 -r"
+fi
+
+# hash `poetry.lock` and compare it to the last time dependencies were installed
+MD5_LAST="$(cut -d' ' -f1 <.poetry.lock.md5)"
+MD5_CURRENT="$($md5sum poetry.lock | cut -d' ' -f1)"
+
+if [ "$MD5_LAST" != "$MD5_CURRENT" ]; then
+  printf '🚀 Detected changes in \033[0;36mpoetry.lock\033[0m; installing dependencies\n'
+  poetry install --all-extras && echo "$MD5_CURRENT" >.poetry.lock.md5
+
+  # display environment info
+  poetry env info
+fi
