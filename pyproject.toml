@@ -5,7 +5,7 @@ requires = [ "maturin>=1.7,<2" ]
 
 [tool.poetry]
 name = "dicom-echo"
-version = "0.0.0+dirty"
+version = "0.0.0"
 description = "A lightweight, cross-platform, blazingly fast implementation of the C-ECHO DICOM procedure."
 authors = [ "Bryant Finney <bryant.finney@outlook.com>" ]
 license = "MIT"
@@ -60,7 +60,7 @@ pre-commit = [
 ]
 
 [tool.poetry-dynamic-versioning]
-enable = false
+enable = true
 # in plain english:
 #   1. is the current commit tagged?
 #      - if yes, convert the tag to PEP-440 format
