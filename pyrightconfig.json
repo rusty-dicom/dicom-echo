@@ -1,0 +1,6 @@
+{
+  "strict": [
+    "echoscu"
+  ],
+  "typeCheckingMode": "strict"
+}

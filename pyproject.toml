@@ -6,11 +6,11 @@ requires = [ "maturin>=1.7,<2" ]
 [tool.poetry]
 name = "dicom-echo"
 version = "0.0.0"
-description = "A lightweight, cross-platform, blazingly fast implementation of the C-ECHO DICOM procedure."
+description = "A lightweight, cross-platform, blazingly fast implementation of the C-ECHO DICOM procedure. 🔥"
 authors = [ "Bryant Finney <bryant.finney@outlook.com>" ]
 license = "MIT"
 readme = "README.md"
-packages = [ { include = "echoscu", from = "." } ]
+packages = [ { include = "echoscu", from = "src" } ]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Developers",
@@ -60,6 +60,7 @@ pre-commit = [
 ]
 
 [tool.poetry-dynamic-versioning]
+# url: https://github.com/mtkennerly/poetry-dynamic-versioning?tab=readme-ov-file#configuration
 enable = true
 # in plain english:
 #   1. is the current commit tagged?
@@ -85,11 +86,19 @@ style = "pep440"
 vcs = "git"
 
 [tool.poetry-dynamic-versioning.substitution]
-files = [ "*.py", "**/__init__.py", "*/__version__.py", "*/_version.py" ]
+files = [ "*.py", "**/__init__.py", "*/__version__.py", "*/_version.py", "rust/Cargo.toml" ]
+patterns = [
+  """(^__version__\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""",
+  """(^version\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""",
+  { value = """(^__version_tuple__\\s*(?::.*?)?=\\s*\\()[^)]*(\\))""", mode = "tuple" },
+]
 
 [tool.maturin]
 features = [ "pyo3/extension-module" ]
+manifest-path = "rust/Cargo.toml"
 module-name = "echoscu.backend"
+python-packages = [ "echoscu" ]
+python-source = "src"
 
 [tool.ruff]
 line-length = 120
@@ -469,7 +478,7 @@ evaluation = "max(0, 0 if fatal else 10.0 - ((float(5 * error + warning + refact
 # msg-template =
 # Set the output format. Available formats are text, parseable, colorized, json
 # and msvs (visual studio). You can also give a reporter class, e.g.
-# mypackage.mymodule.MyReporterClass.
+# my_package.my_module.MyReporterClass.
 output-format = """\
   colorized,\
   text:docs/reports/pylint-report.txt\
@@ -596,6 +605,8 @@ redefining-builtins-modules = [
 ]
 
 [tool.pyright]
+# url: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+# note: file://./pyrightconfig.json has precedence over this section
 strict = [ "echoscu" ]
 typeCheckingMode = "strict"
 
@@ -611,7 +622,7 @@ help = "Build and install this package (with dependencies) in development mode"
 default_item_type = "shell"
 sequence = [
   "poetry install",
-  "maturin develop",
+  "maturin develop --skip-install",
 ]
 
 [tool.poe.tasks.lint]
