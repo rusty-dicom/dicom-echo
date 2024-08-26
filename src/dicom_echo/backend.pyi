@@ -1,4 +1,4 @@
-class Request:
+class CEchoRequest:
     """Send `C-ECHO` requests to a DICOM service class provider."""
 
     address: str

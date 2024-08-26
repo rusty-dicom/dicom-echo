@@ -12,7 +12,7 @@ use pyo3::prelude::*;
 ///   message_id (int): The message ID; defaults to 1
 #[pyclass(module = "backend", get_all)]
 #[derive(Debug)]
-struct Request {
+struct CEchoRequest {
     address: String,
     called_ae_title: String,
     calling_ae_title: String,
@@ -20,7 +20,7 @@ struct Request {
 }
 
 #[pymethods]
-impl Request {
+impl CEchoRequest {
     #[new]
     #[pyo3(
         signature = (
@@ -37,7 +37,7 @@ impl Request {
         calling_ae_title: String,
         message_id: u16,
     ) -> Self {
-        Request {
+        CEchoRequest {
             address,
             called_ae_title,
             calling_ae_title,
@@ -61,9 +61,10 @@ impl Request {
     fn send(&self) -> u8 {
         let association_opt = ClientAssociationOptions::new()
             .with_abstract_syntax(VERIFICATION)
-            .calling_ae_title(&self.calling_ae_title);
+            .calling_ae_title(&self.calling_ae_title)
+            .called_ae_title(&self.called_ae_title);
 
-        let association = association_opt.establish_with(&self.address);
+        let association = association_opt.establish_with(&self.address).unwrap();
         println!("Association established: {:?}", association);
         0
     }
@@ -79,6 +80,6 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 #[pymodule]
 fn backend(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
-    m.add_class::<Request>()?;
+    m.add_class::<CEchoRequest>()?;
     Ok(())
 }
