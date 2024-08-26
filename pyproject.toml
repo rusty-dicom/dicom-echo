@@ -51,6 +51,7 @@ typer = "^0.12.5"
 maturin = "^1.7.1"
 pynvim = "^0.5.0"
 ipykernel = "^6.29.5"
+maturin-import-hook = "^0.1.0"
 
 [tool.poetry.group.lint.dependencies]
 anybadge = "^1.14"
@@ -632,7 +633,9 @@ cmd = "maturin build --out dist --sdist"
 
 [tool.poe.tasks.maturin-develop]
 help = "Install the crate as a module in the poetry-managed virtualenv"
-shell = "maturin develop"
+default_item_type = "shell"
+# TODO: the import hook isn't working in JupyterLab; does it work in pure Python?
+sequence = [ "maturin develop", "python -m maturin_import_hook site install" ]
 
 [tool.poe.tasks.maturin-upload]
 help = "Invoke <c1>maturin upload</c1> to publish this package to a PyPI registry"

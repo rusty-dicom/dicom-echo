@@ -15,15 +15,5 @@ switch_case_indent = true
 [*.sh]
 shell_variant = posix
 
-[*.py]
+[{*.py,*.rs}]
 indent_size = 4
-
-# rely on clang-format for c++ formatting
-[{*.c++,*.cxx,*.cpp,*.h++,*.hxx,*.hpp,*.cc,*.h}]
-indent_style = unset
-indent_size = unset
-end_of_line = unset
-charset = unset
-trim_trailing_whitespace = unset
-insert_final_newline = unset
-switch_case_indent = unset

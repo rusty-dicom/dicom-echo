@@ -942,6 +942,21 @@ patchelf = ["patchelf"]
 zig = ["ziglang (>=0.10.0,<0.13.0)"]
 
 [[package]]
+name = "maturin-import-hook"
+version = "0.1.0"
+description = "import hook to load rust projects built with maturin"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "maturin-import-hook-0.1.0.tar.gz", hash = "sha256:b31457d421db2a6aa51a2431a0f343ace17f4f59944a9670f2e6be66b3ea0499"},
+    {file = "maturin_import_hook-0.1.0-py3-none-any.whl", hash = "sha256:05cfeb40a161ec910081914aaf8909498b39b0e06d3edd89fd618b7cee38cceb"},
+]
+
+[package.dependencies]
+filelock = "*"
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -2101,4 +2116,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "e93efb0fe2f591e17c7f67f31dd00e261e0b0ccbead86ae63e9da1e2fd78c7d8"
+content-hash = "bff031a04e308c3eb01ddee102c27073228154ee2508a0acf534b9cf4efe2d3a"
