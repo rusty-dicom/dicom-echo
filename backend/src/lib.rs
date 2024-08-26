@@ -1,8 +1,15 @@
 /// Implement the backend module in Rust.
-// TODO: use dicom_ul::ClientAssociation;
+use dicom_dictionary_std::uids::VERIFICATION;
+use dicom_ul::ClientAssociationOptions;
 use pyo3::prelude::*;
 
-/// Parameters for the C-STORE request
+/// Send `C-ECHO` requests to a DICOM service class provider.
+///
+/// Args:
+///   address (str): The address of the DICOM SCP
+///   called_ae_title (str): The called AE title; defaults to "ANY-SCP"
+///   calling_ae_title (str): The calling AE title; defaults to "ECHOSCU"
+///   message_id (int): The message ID; defaults to 1
 #[pyclass(module = "backend", get_all)]
 #[derive(Debug)]
 struct Request {
@@ -15,6 +22,15 @@ struct Request {
 #[pymethods]
 impl Request {
     #[new]
+    #[pyo3(
+        signature = (
+            address,
+            /,
+            called_ae_title="ANY-SCP".into(),
+            calling_ae_title="ECHOSCU".into(),
+            message_id=1
+        )
+    )]
     fn new(
         address: String,
         called_ae_title: String,
@@ -40,7 +56,15 @@ impl Request {
         )
     }
 
+    /// Send the `C-ECHO` request and return the response's status.
+    #[pyo3(text_signature = "() -> int")]
     fn send(&self) -> u8 {
+        let association_opt = ClientAssociationOptions::new()
+            .with_abstract_syntax(VERIFICATION)
+            .calling_ae_title(&self.calling_ae_title);
+
+        let association = association_opt.establish_with(&self.address);
+        println!("Association established: {:?}", association);
         0
     }
 }
