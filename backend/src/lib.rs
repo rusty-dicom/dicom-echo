@@ -64,7 +64,14 @@ impl CEchoRequest {
             .calling_ae_title(&self.calling_ae_title)
             .called_ae_title(&self.called_ae_title);
 
-        let association = association_opt.establish_with(&self.address).unwrap();
+        let association = association_opt.establish_with(&self.address).expect(
+            format!(
+                "A-ASSOCIATE service should establish association for {:?}",
+                self
+            )
+            .as_str(),
+        );
+
         println!("Association established: {:?}", association);
         0
     }
