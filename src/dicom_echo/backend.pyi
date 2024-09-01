@@ -1,19 +1,19 @@
-class CEchoRequest:
-    """Send `C-ECHO` requests to a DICOM service class provider."""
+from typing import Literal
 
-    address: str
-    called_ae_title: str
-    calling_ae_title: str
-    message_id: int
+DEFAULT_CALLED_AE_TITLE: Literal['ANY-SCP']
+"""By default, specify this AE title for the target SCP."""
 
-    def __init__(
-        self, address: str, /, called_ae_title: str = 'ANY-SCP', calling_ae_title: str = 'ECHOSCU', message_id: int = 1
-    ) -> None: ...
-    def send(self) -> int:
-        """Send the `C-ECHO` request and return the response's status."""
+DEFAULT_CALLING_AE_TITLE: Literal['ECHOSCU']
+"""By default, specify this AE title for the SCU sending the `C-ECHO` message."""
 
-def do_sum(a: int, b: int) -> str:
-    """Sum two numbers and return the result as a string.
+def send(
+    address: str,
+    /,
+    called_ae_title: str = DEFAULT_CALLED_AE_TITLE,
+    calling_ae_title: str = DEFAULT_CALLING_AE_TITLE,
+    message_id: int = 1,
+) -> int:
+    """Send a `C-ECHO` message to the given address.
 
-    TODO: replace this dummy function when the real backend has been implemented.
+    Reference: [DICOM Standard Part 7, Section 9.1.5](https://www.dicomstandard.org/standards/view/message-exchange#sect_9.1.5)
     """

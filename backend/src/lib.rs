@@ -1,92 +1,114 @@
-/// Implement the backend module in Rust.
-use dicom_dictionary_std::uids::VERIFICATION;
-use dicom_ul::ClientAssociationOptions;
+//! Implement the `dicom_echo.backend` module in Rust.
+use dicom_core::{dicom_value, DataElement, VR};
+use dicom_dictionary_std::{
+    tags,
+    uids::{self, VERIFICATION},
+};
+use dicom_object::{mem::InMemDicomObject, StandardDataDictionary};
+use dicom_transfer_syntax_registry::entries::IMPLICIT_VR_LITTLE_ENDIAN;
+use dicom_ul::{
+    association::ClientAssociationOptions,
+    pdu::{PDataValue, PDataValueType, Pdu},
+};
 use pyo3::prelude::*;
 
-/// Send `C-ECHO` requests to a DICOM service class provider.
-///
-/// Args:
-///   address (str): The address of the DICOM SCP
-///   called_ae_title (str): The called AE title; defaults to "ANY-SCP"
-///   calling_ae_title (str): The calling AE title; defaults to "ECHOSCU"
-///   message_id (int): The message ID; defaults to 1
-#[pyclass(module = "backend", get_all)]
-#[derive(Debug)]
-struct CEchoRequest {
-    address: String,
-    called_ae_title: String,
-    calling_ae_title: String,
-    message_id: u16,
+use client_exceptions::Result;
+
+/// By default, specify this AE title for the target SCP.
+pub const DEFAULT_CALLED_AE_TITLE: &str = "ANY-SCP";
+
+/// By default, specify this AE title for the SCU sending the `C-ECHO` request.
+pub const DEFAULT_CALLING_AE_TITLE: &str = "ECHOSCU";
+
+/// ref: <https://github.com/Enet4/dicom-rs/blob/de7dc5831171202fb20e1928e2c7ff27c5b95f85/echoscu/src/main.rs#L177-L192>
+fn create_echo_command(message_id: u16) -> InMemDicomObject<StandardDataDictionary> {
+    InMemDicomObject::command_from_element_iter([
+        // service
+        DataElement::new(tags::AFFECTED_SOP_CLASS_UID, VR::UI, uids::VERIFICATION),
+        // command
+        DataElement::new(tags::COMMAND_FIELD, VR::US, dicom_value!(U16, [0x0030])),
+        // message ID
+        DataElement::new(tags::MESSAGE_ID, VR::US, dicom_value!(U16, [message_id])),
+        // data set type
+        DataElement::new(
+            tags::COMMAND_DATA_SET_TYPE,
+            VR::US,
+            dicom_value!(U16, [0x0101]),
+        ),
+    ])
 }
 
-#[pymethods]
-impl CEchoRequest {
-    #[new]
-    #[pyo3(
-        signature = (
-            address,
-            /,
-            called_ae_title="ANY-SCP".into(),
-            calling_ae_title="ECHOSCU".into(),
-            message_id=1
-        )
-    )]
-    fn new(
-        address: String,
-        called_ae_title: String,
-        calling_ae_title: String,
-        message_id: u16,
-    ) -> Self {
-        CEchoRequest {
-            address,
-            called_ae_title,
-            calling_ae_title,
-            message_id,
+/// Send a `C-ECHO` message to the given address.
+///
+/// Reference: [DICOM Standard Part 7, Section 9.1.5](https://www.dicomstandard.org/standards/view/message-exchange#sect_9.1.5)
+#[pyfunction]
+#[pyo3(
+    signature = (
+        address, /,
+        called_ae_title=DEFAULT_CALLED_AE_TITLE.into(), calling_ae_title=DEFAULT_CALLING_AE_TITLE.into(),
+        message_id=1
+    ),
+    text_signature = "(address: str, /, called_ae_title: str = DEFAULT_CALLED_AE_TITLE, calling_ae_title: str = DEFAULT_CALLING_AE_TITLE, message_id: int = 1) -> int"
+)]
+pub fn send(
+    address: &str,
+    called_ae_title: &str,
+    calling_ae_title: &str,
+    message_id: u16,
+) -> Result<u16> {
+    let mut association = ClientAssociationOptions::new()
+        .with_abstract_syntax(VERIFICATION)
+        .calling_ae_title(calling_ae_title)
+        .called_ae_title(called_ae_title)
+        .establish_with(address)?;
+
+    let presentation_context = association.presentation_contexts().first().unwrap();
+    let dicom_object = create_echo_command(message_id);
+
+    let mut data = Vec::new();
+    let transfer_syntax = IMPLICIT_VR_LITTLE_ENDIAN.erased();
+
+    dicom_object
+        .write_dataset_with_ts(&mut data, &transfer_syntax)
+        .expect("in-memory dicom object should be serialized to byte vector");
+
+    association.send(&Pdu::PData {
+        data: vec![PDataValue {
+            presentation_context_id: presentation_context.id,
+            value_type: PDataValueType::Command,
+            is_last: true,
+            data,
+        }],
+    })?;
+
+    let pdu = association.receive()?;
+
+    match pdu {
+        Pdu::PData { data } => {
+            let data_value = &data[0];
+            let v = &data_value.data;
+            let obj = InMemDicomObject::read_dataset_with_ts(v.as_slice(), &transfer_syntax)
+                .expect("should be able to read the response dataset returned by the SCP");
+
+            let status = obj
+                .element(tags::STATUS)
+                .expect("response should include the status tag")
+                .to_int::<u16>()
+                .expect("status tag should be decoded to a u16");
+            Ok(status)
+        }
+        _ => {
+            panic!("unexpected response from SCP");
         }
     }
-
-    fn __repr__(&self) -> String {
-        format!("{:?}", self)
-    }
-
-    fn __str__(&self) -> String {
-        format!(
-            r#"Request(address="{}", called_ae_title="{}", calling_ae_title="{}", message_id="{}")"#,
-            self.address, self.called_ae_title, self.calling_ae_title, self.message_id
-        )
-    }
-
-    /// Send the `C-ECHO` request and return the response's status.
-    #[pyo3(text_signature = "() -> int")]
-    fn send(&self) -> u8 {
-        let association_opt = ClientAssociationOptions::new()
-            .with_abstract_syntax(VERIFICATION)
-            .calling_ae_title(&self.calling_ae_title)
-            .called_ae_title(&self.called_ae_title);
-
-        let association = association_opt.establish_with(&self.address).expect(
-            format!(
-                "A-ASSOCIATE service should establish association for {:?}",
-                self
-            )
-            .as_str(),
-        );
-
-        println!("Association established: {:?}", association);
-        0
-    }
 }
 
-/// Formats the sum of two numbers as string.
-#[pyfunction(name = "do_sum", text_signature = "(a: c_uint, b: c_uint) -> str")]
-fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
-    Ok((a + b).to_string())
-}
-
-/// A Python module implemented in Rust.
 #[pymodule]
 fn backend(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
-    m.add_class::<CEchoRequest>()?;
+    m.add_function(wrap_pyfunction!(send, m)?)?;
+    m.add("DEFAULT_CALLED_AE_TITLE", DEFAULT_CALLED_AE_TITLE)?;
+    m.add("DEFAULT_CALLING_AE_TITLE", DEFAULT_CALLING_AE_TITLE)?;
     Ok(())
 }
+
+pub mod client_exceptions;
