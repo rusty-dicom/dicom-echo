@@ -62,7 +62,10 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
+          - pytest
+          - semver
           - typer
+          - typing-extensions
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
@@ -92,7 +95,10 @@ repos:
     hooks:
       - id: pyright
         additional_dependencies:
+          - pytest
+          - semver
           - typer
+          - typing-extensions
 
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.19

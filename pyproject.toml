@@ -35,7 +35,7 @@ classifiers = [
 ]
 
 dynamic = [ "version" ]
-dependencies = [ "typer~=0.12.5" ]
+dependencies = [ "typer~=0.12.5", "typing-extensions~=4.12.2; python_version<'3.9'" ]
 scripts.dicom-echo = "dicom_echo.cli:app"
 
 [tool.poetry]
@@ -46,17 +46,18 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.8.1"
 typer = "^0.12.5"
+typing-extensions = { version = "^4.12.2", python = "<3.9" }
 
 [tool.poetry.group.dev.dependencies]
 maturin = "^1.7.1"
 pynvim = "^0.5.0"
 ipykernel = "^6.29.5"
 maturin-import-hook = "^0.1.0"
+pytest-watch = "^4.2.0"
 
 [tool.poetry.group.lint.dependencies]
 anybadge = "^1.14"
 pylint = "^3.2"
-pylint-django = "^2.5.5"
 pyproject-fmt = "^2.2.1"
 safety = ">=2.3,<4.0"
 shellcheck-py = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
@@ -64,6 +65,18 @@ pre-commit = [
   { version = "<3.6", python = "<3.9" },
   { version = ">=3.6", python = ">=3.9" },
 ]
+mypy = "^1.11.2"
+ruff = "^0.6.3"
+
+[tool.poetry.group.test.dependencies]
+coverage = { extras = [
+  "toml",
+], version = ">=6.4,<8.0" }
+pytest = ">=7.4.4,<9.0.0"
+pytest-clarity = "^1.0.1"
+pytest-cov = ">=3,<6"
+pytest-mock = "^3.8"
+semver = "^3.0.2"
 
 [tool.poetry-dynamic-versioning]
 # url: https://github.com/mtkennerly/poetry-dynamic-versioning?tab=readme-ov-file#configuration
@@ -127,6 +140,7 @@ lint.select = [
   "UP",
   "W",
 ]
+lint.ignore = [ "S603" ]
 # Disallow all relative imports.
 lint.flake8-tidy-imports.ban-relative-imports = "all"
 lint.mccabe.max-complexity = 5
@@ -593,6 +607,42 @@ redefining-builtins-modules = [
   "io",
 ]
 
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
+addopts = "--color=yes --doctest-modules --failed-first --strict-config --strict-markers --verbosity=2"
+doctest_optionflags = "ELLIPSIS IGNORE_EXCEPTION_DETAIL"
+filterwarnings = [
+  "error",
+  "ignore:The --looponfail command line argument and looponfailroots config variable are deprecated:DeprecationWarning",
+  "ignore::DeprecationWarning:dateutil.tz.tz",
+]
+testpaths = [
+  "tests",
+]
+xfail_strict = true
+
+[tool.coverage.report]
+# https://coverage.readthedocs.io/en/latest/config.html#report
+fail_under = 50
+precision = 1
+show_missing = true
+skip_covered = true
+
+[tool.coverage.run]
+# https://coverage.readthedocs.io/en/latest/config.html#run
+command_line = "--module pytest"
+data_file = ".coverage"
+source = [
+  "src",
+]
+
+[tool.coverage.html]
+show_contexts = true
+
+[tool.coverage.xml]
+# https://coverage.readthedocs.io/en/latest/config.html#xml
+output = "doc/reports/coverage.xml"
+
 [tool.pyright]
 # url: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 # note: file://./pyrightconfig.json has precedence over this section
@@ -612,6 +662,10 @@ post_publish = "maturin-upload"
 [tool.poe.tasks]
 _version.cmd = "poetry version --short"
 
+[tool.poe.tasks.cargo]
+help = "Invoke <c1>cargo</c1> commands after applying `poetry-dynamic-versioning` substitutions"
+cmd = "cargo"
+
 [tool.poe.tasks.lint]
 help = "Lint this package"
 default_item_type = "shell"
@@ -627,6 +681,46 @@ sequence = [
   "safety check --full-report --ignore 70612 --save-html docs/reports",
 ]
 
+[tool.poe.tasks.test]
+help = "Test this package and report coverage"
+cmd = """
+  pytest
+    --cov=./src/
+    --cov-branch
+    --cov-context=test
+    --cov-fail-under=90
+    --cov-report=term
+    --cov-report=html:./doc/reports/pytest-html
+    --cov-report=xml:./doc/reports/coverage.xml
+    --doctest-glob=README.md
+    --junitxml=doc/reports/pytest.xml
+    .
+"""
+
+[tool.poe.tasks.test-watch]
+help = "Run tests continuously by watching for file changes"
+env = { "POETRY_DYNAMIC_VERSIONING_BYPASS" = "0.0.0" }
+cmd = "ptw --config ptw.ini"
+
+[tool.poe.tasks.test-py]
+help = "Run the test suite in a virtual environment with the specified Python version"
+args = [
+  { name = "py", positional = true },
+]
+shell = """
+  poetry env use $py
+  poetry install --sync
+  poetry test
+"""
+
+[tool.poe.tasks.test-python-versions]
+help = "Run the test suite in separate virtual environments for each supported Python version"
+shell = """
+  for py in 3.8 3.9 3.10 3.11 3.12; do
+    poetry test-py $py
+  done
+"""
+
 [tool.poe.tasks.maturin-build]
 help = "Invoke <c1>maturin build --out dist --sdist</c1> to compile and build this package"
 cmd = "maturin build --out dist --sdist"
@@ -634,8 +728,7 @@ cmd = "maturin build --out dist --sdist"
 [tool.poe.tasks.maturin-develop]
 help = "Install the crate as a module in the poetry-managed virtualenv"
 default_item_type = "shell"
-# TODO: the import hook isn't working in JupyterLab; does it work in pure Python?
-sequence = [ "maturin develop", "python -m maturin_import_hook site install" ]
+sequence = [ "maturin develop" ]
 
 [tool.poe.tasks.maturin-upload]
 help = "Invoke <c1>maturin upload</c1> to publish this package to a PyPI registry"

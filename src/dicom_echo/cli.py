@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import logging
-from typing import Annotated
 
 import rich
 import typer
 
 import dicom_echo as echo
+
+try:
+    from typing import Annotated, TypeAlias  # type: ignore[attr-defined]
+except ImportError:
+    # note: for supporting Python 3.8
+    from typing_extensions import Annotated, TypeAlias  # type: ignore[assignment]
 
 logger = logging.getLogger(__name__)
 
@@ -21,14 +26,14 @@ _host_help = f"""The socket address of the peer SCP: {_host_port}
     Optionally, the AE title may be included: {_aet_host_port}
 """
 
-AEC = Annotated[
+AEC: TypeAlias = Annotated[
     str,
     typer.Option(
         '-aec', '--called', '--called-ae-title', rich_help_panel='DICOM Options', help='peer AE title of the host SCP'
     ),
 ]
 
-AET = Annotated[
+AET: TypeAlias = Annotated[
     str,
     typer.Option(
         '-aet', '--calling', '--calling-ae-title', rich_help_panel='DICOM Options', help='the AE title of this client'
