@@ -91,12 +91,12 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: lint-docs-py3.12
+          name: lint-doc-py3.12
           path: doc
 
       - uses: actions/download-artifact@v4
         with:
-          name: test-docs-py3.12
+          name: test-doc-py3.12
           path: doc
 
       - uses: ./.github/actions/poe
