@@ -66,17 +66,17 @@ VER: t.TypeAlias = t.Annotated[
     ),
 ]
 
-_host_port = r'[blue]{host}[/blue]:[purple]{port}[/purple]'
-_aet_host_port = r'[green]{AE title}[/green]@' + _host_port
-_host_help = f"""The socket address of the peer SCP: {_host_port}
+BLUE_HOST_PURPLE_PORT = r'[blue]{host}[/blue]:[purple]{port}[/purple]'
+GREEN_AET_BLUE_HOST_PURPLE_PORT = r'[green]{AE title}[/green]@' + BLUE_HOST_PURPLE_PORT
+HOST_OPTION_HELP = f"""The socket address of the peer SCP: {BLUE_HOST_PURPLE_PORT}
 
-    Optionally, the AE title may be included: {_aet_host_port}
+    Optionally, the AE title may be included: {GREEN_AET_BLUE_HOST_PURPLE_PORT}
 """
 
 
 @app.command()
 def main(
-    host: t.Annotated[str, typer.Argument(show_default=False, help=_host_help)],
+    host: t.Annotated[str, typer.Argument(show_default=False, help=HOST_OPTION_HELP)],
     called_ae_title: AEC = echo.DEFAULT_CALLED_AE_TITLE,
     calling_ae_title: AET = echo.DEFAULT_CALLING_AE_TITLE,
     message_id: ID = 1,

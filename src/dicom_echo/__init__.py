@@ -15,8 +15,8 @@ A simple CLI for sending `C-ECHO` messages. Built with `typer`.
 
 from __future__ import annotations
 
-from dicom_echo.backend import DEFAULT_CALLED_AE_TITLE, DEFAULT_CALLING_AE_TITLE
-from dicom_echo.backend import send as __send
+from dicom_echo.backend import DEFAULT_CALLED_AE_TITLE, DEFAULT_CALLING_AE_TITLE  # pylint: disable=no-name-in-module
+from dicom_echo.backend import send as __send  # pylint: disable=no-name-in-module
 
 __all__ = ['DEFAULT_CALLED_AE_TITLE', 'DEFAULT_CALLING_AE_TITLE', 'send']
 
