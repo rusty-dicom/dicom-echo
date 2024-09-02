@@ -2,9 +2,9 @@
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-A lightweight, cross-platform, blazingly fast implementation of the `C-ECHO`\[^1\] DICOM procedure. 🔥
+A lightweight, cross-platform, blazingly fast implementation of the `C-ECHO`[^1] DICOM procedure. 🔥
 
-This package implements a service class user (SCU)\[^2\] app which functions like a `ping`, testing that the peer service class provider (SCP)\[^2\] is accepting associations for the given AE titles\[^3\].
+This package implements a service class user (SCU)[^2] app which functions like a `ping`, testing that the peer service class provider (SCP)[^2] is accepting associations for the given AE titles[^3].
 
 Both a simple CLI and a Python API are provided for easy integration with your DICOM projects.
 
@@ -61,26 +61,31 @@ To send a `C-ECHO` request to `localhost:11111`:
 
 The `dicom_echo` module provides a simple API for sending `C-ECHO` requests:
 
+<!--
+
+```python
+>>> address = getfixture('scpserver')
+
+```
+
+ -->
+
 ```python
 >>> import dicom_echo as echo
 
->>> echo.send('localhost:11111')
+>>> echo.send(address)
 0
+
 ```
 
 See the [API documentation](https://dicom-echo.readthedocs.io/en/latest/) for more details.
 
-\[^1\]: for additional details, see [9.3.5 `C-ECHO` protocol | DICOM PS3.7 2024c - Message Exchange](https://dicom.nema.org/medical/dicom/current/output/chtml/part07/sect_9.3.5.html#sect_9.3.5.1)
-\[^2\]:
-[6.7 Service Class Specification | DICOM PS3.4 2024c - Service Class Specifications](https://dicom.nema.org/medical/dicom/current/output/chtml/part04/sect_6.7.html#:~:text=The%20SCU%20or%20user%20agent,are%20determined%20during%20Association%20establishment.) for the definitions of service class user (SCU) and service class provider (SCP):
+[^1]: for additional details, see [9.3.5 `C-ECHO` protocol | DICOM PS3.7 2024c - Message Exchange](https://dicom.nema.org/medical/dicom/current/output/chtml/part07/sect_9.3.5.html#sect_9.3.5.1)
 
-```
-> The SCU or user agent acts as the 'client,' while the SCP or origin server acts as the 'server'. For DIMSE based services the SCU/SCP roles are determined during Association establishment
-```
+[^2]: [6.7 Service Class Specification | DICOM PS3.4 2024c - Service Class Specifications](https://dicom.nema.org/medical/dicom/current/output/chtml/part04/sect_6.7.html#:~:text=The%20SCU%20or%20user%20agent,are%20determined%20during%20Association%20establishment.) for the definitions of service class user (SCU) and service class provider (SCP):
 
-\[^3\]:
-[C.1: DICOM Application Entity Titles | DICOM PS3.8 2024c - Network Communication Support for Message Exchange](https://dicom.nema.org/medical/dicom/current/output/chtml/part08/chapter_C.html):
+    > The SCU or user agent acts as the 'client,' while the SCP or origin server acts as the 'server'. For DIMSE based services the SCU/SCP roles are determined during Association establishment
 
-```
-> A DICOM Application Entity Title uniquely identifies a service or application on a specific system in the network.
-```
+[^3]: [C.1: DICOM Application Entity Titles | DICOM PS3.8 2024c - Network Communication Support for Message Exchange](https://dicom.nema.org/medical/dicom/current/output/chtml/part08/chapter_C.html):
+
+    > A DICOM Application Entity Title uniquely identifies a service or application on a specific system in the network.

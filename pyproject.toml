@@ -70,6 +70,9 @@ pyproject-fmt = "^2.2.1"
 ruff = "^0.6.3"
 safety = ">=2.3,<4.0"
 shellcheck-py = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
+mdformat-gfm = "^0.3.6"
+mdformat-frontmatter = "^2.0.8"
+mdformat-footnote = "^0.1.1"
 
 [tool.poetry.group.test.dependencies]
 coverage = { extras = [
@@ -690,6 +693,7 @@ help = "Launch a local server to view this package's documentation"
 uses = { PACKAGE_VERSION = "_version" }
 cmd = """
   pdoc
+    doctest
     dicom_echo
     dicom_echo.backend
     dicom_echo.cli
