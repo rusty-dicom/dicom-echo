@@ -675,6 +675,14 @@ _version.cmd = "poetry version --short"
 help = "Invoke <c1>cargo</c1> commands after applying `poetry-dynamic-versioning` substitutions"
 cmd = "cargo"
 
+[tool.poe.tasks.check-for-prerelease]
+capture_stdout = "check-for-prerelease.out"
+help = "Evaluate whether a new prerelease can be created"
+shell = """
+  semantic-release version --print --prerelease 2>&1 | grep -q "No release will be made" ||
+    echo true
+"""
+
 [tool.poe.tasks.docs]
 help = "Generate this package's docs"
 uses = { PACKAGE_VERSION = "_version" }
