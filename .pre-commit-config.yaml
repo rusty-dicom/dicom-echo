@@ -63,6 +63,7 @@ repos:
       - id: mypy
         additional_dependencies:
           - pytest
+          - pytest_mock
           - semver
           - typer
           - typing-extensions
@@ -96,6 +97,7 @@ repos:
       - id: pyright
         additional_dependencies:
           - pytest
+          - pytest_mock
           - semver
           - typer
           - typing-extensions
