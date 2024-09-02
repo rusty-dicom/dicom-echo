@@ -1,4 +1,17 @@
-"""Define a CLI and an API for issuing DICOM's `C-ECHO` procedure."""
+""".. include:: ../../README.md
+  :start-line: 3
+
+# Submodules
+
+## `dicom_echo.backend`
+
+This module is built with Rust and provides the core functionality for sending `C-ECHO` messages. See
+[/backend/](./backend/index.html) for the crate's documentation.
+
+## `dicom_echo.cli`
+
+A simple CLI for sending `C-ECHO` messages. Built with `typer`.
+"""  # noqa: D205, D415
 
 from __future__ import annotations
 

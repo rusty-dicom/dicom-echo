@@ -1,0 +1,205 @@
+# Run this workflow to test Python code changes.
+name: 🎨 poe (push)
+
+on:
+  push:
+    branches: [main]
+    tags: [v*]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/poe
+        with:
+          poe-task: lint
+          poetry-groups: main,build,test,lint
+
+  test:
+    strategy:
+      matrix:
+        py: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/poe
+        with:
+          poe-task: test
+          poetry-groups: main,build,test
+          python-version: ${{ matrix.py }}
+
+  check:
+    outputs:
+      release: ${{ steps.check.outputs.release }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/poe
+        with:
+          artifacts: ""
+          poe-task: check-for-prerelease
+
+      - id: check
+        run: printf 'release=%s\n' "$(cat check-for-prerelease.out)"
+
+  release:
+    if: needs.check.outputs.release == 'true'
+    needs:
+      - lint
+      - test
+      - check
+
+    outputs:
+      new: ${{ steps.semantic-release.outputs.released }}
+      version: ${{ steps.semantic-release.outputs.version }}
+
+    permissions:
+      id-token: write
+      contents: write
+      packages: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - id: semantic-release
+        uses: python-semantic-release/python-semantic-release@v9.8.3
+        with:
+          commit: false
+          github_token: ${{ github.token }}
+          prerelease: true
+          root_options: --strict -vv
+
+  docs:
+    if: needs.check.outputs.release != 'true'
+    needs:
+      - lint
+      - test
+      - check
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: lint-docs-py3.12
+          path: doc
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: test-docs-py3.12
+          path: doc
+
+      - uses: ./.github/actions/poe
+        with:
+          artifacts: ""
+          poe-task: setup-versioning
+
+      - uses: ./.github/actions/poe
+        with:
+          artifacts: ""
+          poe-task: docs
+
+      - name: Fix permissions
+        run: |
+          chmod -c -R +rX "doc/" | while read -r line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: doc
+
+  deploy:
+    if: needs.check.outputs.release != 'true'
+    environment:
+      name: GitHub Pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    needs:
+      - check
+      - docs
+
+    permissions:
+      pages: write
+      id-token: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
+
+  test-pypi:
+    environment:
+      name: test.pypi.org
+      url: https://test.pypi.org/p/config-ninja
+
+    if: needs.check.outputs.release != 'true'  && github.ref_type == 'tag'
+    needs:
+      - check
+      - lint
+      - test
+
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: ./.github/actions/poe
+        with:
+          artifacts: ""
+          poe-task: setup-versioning
+
+      - uses: ./.github/actions/poe
+        with:
+          artifacts: ""
+          poe-task: build-pkg
+
+      - run: 'echo "TODO: publish to internal pypi registry"'
+
+  pypi:
+    environment:
+      name: pypi.org
+      url: https://pypi.org/p/config-ninja
+
+    if: github.ref_type == 'tag'
+    needs:
+      - test-pypi
+
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: ./.github/actions/poe
+        with:
+          artifacts: ""
+          poe-task: setup-versioning
+
+      - uses: ./.github/actions/poe
+        with:
+          artifacts: ""
+          poe-task: build-pkg
+
+      - run: 'echo "TODO: publish to internal pypi registry"'

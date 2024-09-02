@@ -48,25 +48,28 @@ python = "^3.8.1"
 typer = "^0.12.5"
 typing-extensions = { version = "^4.12.2", python = "<3.9" }
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.group.build.dependencies]
 maturin = "^1.7.1"
+
+[tool.poetry.group.dev.dependencies]
 pynvim = "^0.5.0"
 ipykernel = "^6.29.5"
 maturin-import-hook = "^0.1.0"
 pytest-watch = "^4.2.0"
+pdoc = "^14.6.1"
 
 [tool.poetry.group.lint.dependencies]
 anybadge = "^1.14"
-pylint = "^3.2"
-pyproject-fmt = "^2.2.1"
-safety = ">=2.3,<4.0"
-shellcheck-py = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
+mypy = "^1.11.2"
 pre-commit = [
   { version = "<3.6", python = "<3.9" },
   { version = ">=3.6", python = ">=3.9" },
 ]
-mypy = "^1.11.2"
+pylint = "^3.2"
+pyproject-fmt = "^2.2.1"
 ruff = "^0.6.3"
+safety = ">=2.3,<4.0"
+shellcheck-py = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
 
 [tool.poetry.group.test.dependencies]
 coverage = { extras = [
@@ -668,6 +671,41 @@ _version.cmd = "poetry version --short"
 [tool.poe.tasks.cargo]
 help = "Invoke <c1>cargo</c1> commands after applying `poetry-dynamic-versioning` substitutions"
 cmd = "cargo"
+
+[tool.poe.tasks.docs]
+help = "Generate this package's docs"
+uses = { PACKAGE_VERSION = "_version" }
+
+[[tool.poe.tasks.docs.sequence]]
+ref = "cargo doc"
+
+[[tool.poe.tasks.docs.sequence]]
+cmd = "cp -r target/doc/ ./doc"
+
+[[tool.poe.tasks.docs.sequence]]
+ref = "docs-serve --output-directory ./doc"
+
+[tool.poe.tasks.docs-serve]
+help = "Launch a local server to view this package's documentation"
+uses = { PACKAGE_VERSION = "_version" }
+cmd = """
+  pdoc
+    dicom_echo
+    dicom_echo.backend
+    dicom_echo.cli
+    maturin
+    pathlib
+    pytest
+    pytest_mock
+    pytest_mock.plugin
+    tests
+    typer
+    typing
+    unittest
+    --docformat google
+    --footer "$PACKAGE_VERSION"
+    --mermaid
+"""
 
 [tool.poe.tasks.lint]
 help = "Lint this package"

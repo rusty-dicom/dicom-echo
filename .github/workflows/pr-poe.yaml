@@ -1,0 +1,37 @@
+# Run this workflow to test Python code changes.
+name: 🎨 poe (PR)
+
+on:
+  pull_request:
+    paths:
+      - "**/*.py"
+      - "*.py"
+      - .pre-commit-config.yaml
+      - poetry.lock
+      - pyproject.toml
+      - .github/workflows/pr-poe.yaml
+      - .github/actions/poe/*
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/poe
+        with:
+          poe-task: lint
+          poetry-groups: main,build,test,lint
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        py: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/poe
+        with:
+          poe-task: test
+          poetry-groups: main,build,test
+          python-version: ${{ matrix.py }}

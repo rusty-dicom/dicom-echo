@@ -1,0 +1,65 @@
+name: setup
+description: Execute steps to set up the project
+inputs:
+  artifacts:
+    description: The path to the artifacts to upload
+    default: docs
+
+  poe-task:
+    description: Execute this 'poe' task
+    default: test
+
+  poetry-groups:
+    description: The dependency groups to install with poetry
+    default: ""
+
+  python-version:
+    description: The version of Python to use
+    default: "3.12"
+
+runs:
+  steps:
+    - run: pipx install poetry
+      shell: sh
+
+    - run: pipx inject poetry 'poethepoet[poetry_plugin]'
+      shell: sh
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - id: poetry
+      run: tr -d '\n' <<<"${{ inputs.poetry-groups }}" |
+        tr -c '[:alnum:]' '-' |
+        xargs printf 'groups=%s\n' >>"$GITHUB_OUTPUT"
+      shell: bash
+
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache
+        key: ${{ inputs.python-version }}-${{ steps.poetry.outputs.groups }}
+
+    - run: poetry
+        ${{ inputs.poetry-groups && format('install --only {0}', inputs.poetry-groups) || 'install'}}
+        --all-extras
+        --sync
+      shell: sh
+
+    # note: 'poetry' is used to run 'poe' tasks because `poetry_command = ""` in 'pyproject.toml'
+    # ref: https://github.com/ElucidBioimaging/back-end-health-checks/blob/452556c544c243ef829c469f0e11fcb0ebcbe4f0/pyproject.toml#L46
+    - run: poetry ${{ inputs.poe-task }}
+      shell: sh
+
+    - if: ${{ inputs.artifacts }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.poe-task }}-${{ inputs.artifacts }}-py${{ inputs.python-version }}
+        overwrite: true
+        path: ${{ inputs.artifacts }}
+
+    - if: ${{ runner.debug }}
+      run: git status
+      shell: sh
+
+  using: composite

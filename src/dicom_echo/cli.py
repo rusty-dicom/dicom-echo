@@ -1,11 +1,10 @@
-"""Define a CLI for sending `C-ECHO` message to a service class provider."""
+""".. include:: ./cli.md"""  # noqa: D415
 
 from __future__ import annotations
 
 import logging
 import sys
 from pathlib import Path
-from typing import Optional
 
 import rich
 import typer
@@ -13,10 +12,14 @@ import typer
 import dicom_echo as echo
 
 try:
-    from typing import Annotated, TypeAlias  # type: ignore[attr-defined]
-except ImportError:  # pragma: no cover
+    import typing as t
+
+    _ = t.Annotated, t.TypeAlias  # type: ignore[attr-defined]
+except AttributeError:  # pragma: no cover
     # note: for supporting Python 3.8
-    from typing_extensions import Annotated, TypeAlias  # type: ignore[assignment]
+    import typing_extensions as t  # type: ignore[no-redef]
+
+__all__ = ['main', 'version_callback']
 
 logger = logging.getLogger(__name__)
 
@@ -34,26 +37,26 @@ def version_callback(value: bool | None) -> None:
     raise typer.Exit()
 
 
-AEC: TypeAlias = Annotated[
+AEC: t.TypeAlias = t.Annotated[
     str,
     typer.Option(
         '-aec', '--called', '--called-ae-title', rich_help_panel='DICOM Options', help='peer AE title of the host SCP'
     ),
 ]
 
-AET: TypeAlias = Annotated[
+AET: t.TypeAlias = t.Annotated[
     str,
     typer.Option(
         '-aet', '--calling', '--calling-ae-title', rich_help_panel='DICOM Options', help='the AE title of this client'
     ),
 ]
 
-ID: TypeAlias = Annotated[
+ID: t.TypeAlias = t.Annotated[
     int, typer.Option('-id', '--id', '--message-id', rich_help_panel='DICOM Options', help='the message ID to send')
 ]
 
-VER: TypeAlias = Annotated[
-    Optional[bool],
+VER: t.TypeAlias = t.Annotated[
+    bool,
     typer.Option(
         '-V',
         '--version',
@@ -73,13 +76,13 @@ _host_help = f"""The socket address of the peer SCP: {_host_port}
 
 @app.command()
 def main(
-    host: Annotated[str, typer.Argument(show_default=False, help=_host_help)],
+    host: t.Annotated[str, typer.Argument(show_default=False, help=_host_help)],
     called_ae_title: AEC = echo.DEFAULT_CALLED_AE_TITLE,
     calling_ae_title: AET = echo.DEFAULT_CALLING_AE_TITLE,
     message_id: ID = 1,
-    version: VER = None,
+    version: VER = False,
 ) -> None:
-    """Send a `C-ECHO` message to the given address.
+    """Send a `C-ECHO` request to the given address.
 
     The `C-ECHO` procedure functions like a `ping`, serving to test that the peer SCP is accepting associations.
 
