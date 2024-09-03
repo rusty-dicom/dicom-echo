@@ -95,8 +95,8 @@ vcs = "git"
 [tool.poetry-dynamic-versioning.substitution]
 files = [ "*.py", "**/__init__.py", "*/__version__.py", "*/_version.py", "backend/Cargo.toml" ]
 patterns = [
-  """(^__version__\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""",
-  """(^version\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""",
+  { value = """(^__version__\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""", mode = "str" },
+  { value = """(^version\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""", mode = "str" },
   { value = """(^__version_tuple__\\s*(?::.*?)?=\\s*\\()[^)]*(\\))""", mode = "tuple" },
 ]
 
@@ -719,19 +719,24 @@ cmd = """
 [tool.poe.tasks.lint]
 help = "Lint this package"
 default_item_type = "shell"
-sequence = [
-  # note: replace `poetry-dynamic-versioning`'s double quotes with single quotes
-  "ruff format --range=24-25 src/dicom_echo/__init__.py",
-  "pre-commit run --all-files --color always",
-  "pylint src",
-  """
+
+[[tool.poe.tasks.lint.sequence]]
+# note: use ruff to replace `poetry-dynamic-versioning`'s double quotes with single quotes in __init__.py
+shell = """
+  ruff format --range=24-25 src/dicom_echo/__init__.py
+  pre-commit run --all-files --color always
+  pylint src
+"""
+
+[[tool.poe.tasks.lint.sequence]]
+shell = """
   grep -oE 'Your code has been rated at [0-9.]+' docs/reports/pylint-report.txt |
-    rev | cut -d' ' -f1 | rev |
-    xargs -I{} anybadge --overwrite --label pylint --value {} \
-      --file=docs/reports/pylint.svg 7=red 8=orange 9=yellow 10=green
-  """,
-  "safety check --full-report --ignore 70612 --save-html docs/reports",
-]
+      rev | cut -d' ' -f1 | rev |
+      xargs -I{} anybadge --overwrite --label pylint --value {} --file=docs/reports/pylint.svg 7=red 8=orange 9=yellow 10=green
+"""
+
+[[tool.poe.tasks.lint.sequence]]
+cmd = "safety check --full-report --ignore 70612 --save-html docs/reports"
 
 [tool.poe.tasks.test]
 help = "Test this package and report coverage"
