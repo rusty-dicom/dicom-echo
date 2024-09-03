@@ -490,7 +490,7 @@ evaluation = "max(0, 0 if fatal else 10.0 - ((float(5 * error + warning + refact
 # my_package.my_module.MyReporterClass.
 output-format = """\
   colorized,\
-  text:doc/reports/pylint-report.txt\
+  text:docs/reports/pylint-report.txt\
 """
 # Tells whether to display a full report or only the messages.
 reports = "y"
@@ -650,7 +650,7 @@ show_contexts = true
 
 [tool.coverage.xml]
 # https://coverage.readthedocs.io/en/latest/config.html#xml
-output = "doc/reports/coverage.xml"
+output = "docs/reports/coverage.xml"
 
 [tool.pyright]
 # url: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
@@ -688,13 +688,10 @@ help = "Generate this package's docs"
 uses = { PACKAGE_VERSION = "_version" }
 
 [[tool.poe.tasks.docs.sequence]]
-ref = "cargo doc"
+ref = "cargo doc --target-dir ./docs"
 
 [[tool.poe.tasks.docs.sequence]]
-cmd = "cp -r target/doc/ ./doc"
-
-[[tool.poe.tasks.docs.sequence]]
-ref = "docs-serve --output-directory ./doc"
+ref = "docs-serve --output-directory ./docs"
 
 [tool.poe.tasks.docs-serve]
 help = "Launch a local server to view this package's documentation"
@@ -728,12 +725,12 @@ sequence = [
   "pre-commit run --all-files --color always",
   "pylint src",
   """
-  grep -oE 'Your code has been rated at [0-9.]+' doc/reports/pylint-report.txt |
+  grep -oE 'Your code has been rated at [0-9.]+' docs/reports/pylint-report.txt |
     rev | cut -d' ' -f1 | rev |
     xargs -I{} anybadge --overwrite --label pylint --value {} \
-      --file=doc/reports/pylint.svg 7=red 8=orange 9=yellow 10=green
+      --file=docs/reports/pylint.svg 7=red 8=orange 9=yellow 10=green
   """,
-  "safety check --full-report --ignore 70612 --save-html doc/reports",
+  "safety check --full-report --ignore 70612 --save-html docs/reports",
 ]
 
 [tool.poe.tasks.test]
@@ -745,10 +742,10 @@ cmd = """
     --cov-context=test
     --cov-fail-under=90
     --cov-report=term
-    --cov-report=html:./doc/reports/pytest-html
-    --cov-report=xml:./doc/reports/coverage.xml
+    --cov-report=html:./docs/reports/pytest-html
+    --cov-report=xml:./docs/reports/coverage.xml
     --doctest-glob=README.md
-    --junitxml=doc/reports/pytest.xml
+    --junitxml=docs/reports/pytest.xml
     .
 """
 

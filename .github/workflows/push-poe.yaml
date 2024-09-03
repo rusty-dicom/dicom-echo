@@ -91,13 +91,13 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: lint-doc-py3.12
-          path: doc
+          name: lint-docs-py3.12
+          path: docs
 
       - uses: actions/download-artifact@v4
         with:
-          name: test-doc-py3.12
-          path: doc
+          name: test-docs-py3.12
+          path: docs
 
       - uses: ./.github/actions/poe
         with:
@@ -111,7 +111,7 @@ jobs:
 
       - name: Fix permissions
         run: |
-          chmod -c -R +rX "doc/" | while read -r line; do
+          chmod -c -R +rX "docs/" | while read -r line; do
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
 
@@ -119,7 +119,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
-          path: doc
+          path: docs
 
   deploy:
     if: needs.check.outputs.release != 'true'

@@ -3,7 +3,7 @@ description: Execute steps to set up the project
 inputs:
   artifacts:
     description: The path to the artifacts to upload
-    default: doc
+    default: docs
 
   poe-task:
     description: Execute this 'poe' task
