@@ -785,7 +785,7 @@ cmd = "maturin build --out dist --sdist"
 
 [tool.poe.tasks.maturin-develop]
 help = "Install the crate as a module in the poetry-managed virtualenv"
-shell = "! command -v cargo >/dev/null && maturin develop"
+shell = "! command -v cargo >/dev/null || maturin develop"
 
 [tool.poe.tasks.maturin-upload]
 help = "Invoke <c1>maturin upload</c1> to publish this package to a PyPI registry"
