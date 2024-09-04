@@ -83,6 +83,7 @@ pytest-clarity = "^1.0.1"
 pytest-cov = ">=3,<6"
 pytest-mock = "^3.8"
 semver = "^3.0.2"
+pytest-error-for-skips = "^2.0.2"
 
 [tool.poetry-dynamic-versioning]
 # url: https://github.com/mtkennerly/poetry-dynamic-versioning?tab=readme-ov-file#configuration
@@ -784,8 +785,7 @@ cmd = "maturin build --out dist --sdist"
 
 [tool.poe.tasks.maturin-develop]
 help = "Install the crate as a module in the poetry-managed virtualenv"
-default_item_type = "shell"
-sequence = [ "maturin develop" ]
+shell = "! command -v cargo >/dev/null && maturin develop"
 
 [tool.poe.tasks.maturin-upload]
 help = "Invoke <c1>maturin upload</c1> to publish this package to a PyPI registry"
