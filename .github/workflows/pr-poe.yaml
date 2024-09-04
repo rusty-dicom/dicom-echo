@@ -22,6 +22,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/cargo
+        with:
+          command: install dicom-storescp
+
       - uses: ./.github/actions/poe
         with:
           poe-task: test --error-for-skips
