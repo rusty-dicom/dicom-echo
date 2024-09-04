@@ -83,6 +83,7 @@ pytest-clarity = "^1.0.1"
 pytest-cov = ">=3,<6"
 pytest-mock = "^3.8"
 semver = "^3.0.2"
+pytest-error-for-skips = "^2.0.2"
 
 [tool.poetry-dynamic-versioning]
 # url: https://github.com/mtkennerly/poetry-dynamic-versioning?tab=readme-ov-file#configuration

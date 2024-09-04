@@ -32,6 +32,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/poe
         with:
-          poe-task: test
+          poe-task: test --error-for-skips
           poetry-groups: main,build,test
           python-version: ${{ matrix.py }}
