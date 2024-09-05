@@ -17,6 +17,11 @@ inputs:
     description: The version of Python to use
     default: "3.12"
 
+outputs:
+  artifacts:
+    description: The name of the build artifacts this action publishes to GitHub
+    value: ${{ steps.artifacts.outputs.name }}
+
 runs:
   steps:
     - run: pipx install poetry
@@ -47,14 +52,25 @@ runs:
       shell: sh
 
     # note: 'poetry' is used to run 'poe' tasks because `poetry_command = ""` in 'pyproject.toml'
-    # ref: https://github.com/ElucidBioimaging/back-end-health-checks/blob/452556c544c243ef829c469f0e11fcb0ebcbe4f0/pyproject.toml#L46
+    # ref: https://github.com/rusty-dicom/dicom-echo/blob/faabe95b0b60c2936de99351656f470363bc96c4/pyproject.toml#L604
     - run: poetry ${{ inputs.poe-task }}
+      shell: sh
+
+    # strip arguments from the task when naming the artifacts
+    - id: artifacts
+      if: ${{ inputs.artifacts }}
+      env:
+        POE_TASK: ${{ inputs.poe-task }}
+      run: printf 'name=%s-%s-py%s\n'
+        "${POE_TASK% *}"
+        "${{ inputs.artifacts }}"
+        "${{ inputs.python-version }}" >>"$GITHUB_OUTPUT"
       shell: sh
 
     - if: ${{ inputs.artifacts }}
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.poe-task }}-${{ inputs.artifacts }}-py${{ inputs.python-version }}
+        name: ${{ steps.artifacts.outputs.name }}
         overwrite: true
         path: ${{ inputs.artifacts }}
 
