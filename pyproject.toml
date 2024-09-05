@@ -674,7 +674,8 @@ _version.cmd = "poetry version --short"
 
 [tool.poe.tasks.cargo]
 help = "Invoke <c1>cargo</c1> commands after applying `poetry-dynamic-versioning` substitutions"
-cmd = "cargo"
+shell = "! command -v cargo >/dev/null || cargo $cmd"
+args = [ { name = "cmd", positional = true } ]
 
 [tool.poe.tasks.check-for-prerelease]
 capture_stdout = "check-for-prerelease.out"
@@ -689,7 +690,7 @@ help = "Generate this package's docs"
 uses = { PACKAGE_VERSION = "_version" }
 
 [[tool.poe.tasks.docs.sequence]]
-ref = "cargo doc --target-dir ./docs"
+ref = "cargo doc -- --target-dir ./docs"
 
 [[tool.poe.tasks.docs.sequence]]
 ref = "docs-serve --output-directory ./docs"
