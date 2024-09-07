@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
-          poe-task: lint
-          poetry-groups: main,build,test,lint
+          command: lint
+          groups: main,build,test,lint
 
   test:
     strategy:
@@ -29,10 +29,10 @@ jobs:
         with:
           command: install dicom-storescp
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
-          poe-task: test --error-for-skips
-          poetry-groups: main,build,test
+          command: test --error-for-skips
+          groups: main,build,test
           python-version: ${{ matrix.py }}
 
   check:
@@ -41,10 +41,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
           artifacts: ""
-          poe-task: check-for-prerelease
+          command: check-for-prerelease
 
       - id: check
         run: printf 'release=%s\n' "$(cat check-for-prerelease.out)"
@@ -104,15 +104,15 @@ jobs:
           name: test-docs-py3.12
           path: docs
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
           artifacts: ""
-          poe-task: setup-versioning
+          command: setup-versioning
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
           artifacts: ""
-          poe-task: docs
+          command: docs
 
       - name: Fix permissions
         run: |
@@ -167,15 +167,15 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
           artifacts: ""
-          poe-task: setup-versioning
+          command: setup-versioning
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
           artifacts: ""
-          poe-task: build-pkg
+          command: build-pkg
 
       - run: 'echo "TODO: publish to internal pypi registry"'
 
@@ -197,14 +197,14 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
           artifacts: ""
-          poe-task: setup-versioning
+          command: setup-versioning
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
           artifacts: ""
-          poe-task: build-pkg
+          command: build-pkg
 
       - run: 'echo "TODO: publish to internal pypi registry"'
