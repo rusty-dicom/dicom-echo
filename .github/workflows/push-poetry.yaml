@@ -3,7 +3,7 @@ name: 🎨 poe (push)
 
 on:
   push:
-    branches: [main]
+    branches: [main, ci/refactor]
     tags: [v*]
 
 jobs:
@@ -147,6 +147,71 @@ jobs:
         with:
           artifact_name: github-pages
 
+  build:
+    name: Build wheels-${{ matrix.wheels }}-${{ matrix.target }} on ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        runner: [ubuntu-latest]
+        manylinux: [auto, musllinux_1_2]
+        target: [x86_64, x86, aarch64, armv7, s390x, ppc64le]
+
+        exclude:
+          - { manylinux: musllinux_1_2, target: s390x }
+          - { manylinux: musllinux_1_2, target: ppc64le }
+
+        # prettier-ignore
+        include:
+          - {                                          manylinux: auto,          wheels: linux }
+          - {                                          manylinux: musllinux_1_2, wheels: musllinux }
+          - { runner: macos-12,       target: x86_64,                            wheels: macos }
+          - { runner: macos-14,       target: aarch64,                           wheels: macos }
+          - { runner: windows-latest, target: x86,                               wheels: windows }
+          - { runner: windows-latest, target: x64,                               wheels: windows }
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: actions/setup-python@v5
+        with:
+          architecture: ${{ matrix.runner == 'windows-latest' && matrix.target || null }}
+          python-version: 3.x
+
+      - uses: ./.github/actions/poetry
+        with: { artifacts: "", command: setup-versioning, groups: build }
+
+      - uses: ./.github/actions/poetry
+        with: { artifacts: "", command: dynamic-versioning, groups: build }
+
+      - uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist --find-interpreter
+          sccache: "true"
+          manylinux: ${{ matrix.manylinux}}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.wheels }}-${{ matrix.target }}
+          path: dist
+
+  sdist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-sdist
+          path: dist
+
   test-pypi:
     environment:
       name: test.pypi.org
@@ -157,27 +222,18 @@ jobs:
       - check
       - lint
       - test
+      - build
+      - sdist
 
     permissions:
       id-token: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          fetch-tags: true
+      - uses: actions/download-artifact@v4
 
-      - uses: ./.github/actions/poetry
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          artifacts: ""
-          command: setup-versioning
-
-      - uses: ./.github/actions/poetry
-        with:
-          artifacts: ""
-          command: build-pkg
-
-      - run: 'echo "TODO: publish to internal pypi registry"'
+          repository-url: https://test.pypi.org/legacy/
 
   pypi:
     environment:
@@ -192,19 +248,6 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          fetch-tags: true
+      - uses: actions/download-artifact@v4
 
-      - uses: ./.github/actions/poetry
-        with:
-          artifacts: ""
-          command: setup-versioning
-
-      - uses: ./.github/actions/poetry
-        with:
-          artifacts: ""
-          command: build-pkg
-
-      - run: 'echo "TODO: publish to internal pypi registry"'
+      - uses: pypa/gh-action-pypi-publish@release/v1
