@@ -5,12 +5,12 @@ inputs:
     description: The path to the artifacts to upload
     default: docs
 
-  poe-task:
-    description: Execute this 'poe' task
+  command:
+    description: Execute this poetry command
     default: test
 
-  poetry-groups:
-    description: The dependency groups to install with poetry
+  groups:
+    description: Install these dependency groups with poetry
     default: ""
 
   python-version:
@@ -35,7 +35,7 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - id: poetry
-      run: tr -d '\n' <<<"${{ inputs.poetry-groups }}" |
+      run: tr -d '\n' <<<"${{ inputs.groups }}" |
         tr -c '[:alnum:]' '-' |
         xargs printf 'groups=%s\n' >>"$GITHUB_OUTPUT"
       shell: bash
@@ -46,21 +46,21 @@ runs:
         key: ${{ inputs.python-version }}-${{ steps.poetry.outputs.groups }}
 
     - run: poetry
-        ${{ inputs.poetry-groups && format('install --only {0}', inputs.poetry-groups) || 'install'}}
+        ${{ inputs.groups && format('install --only {0}', inputs.groups) || 'install'}}
         --all-extras
         --sync
       shell: sh
 
     # note: 'poetry' is used to run 'poe' tasks because `poetry_command = ""` in 'pyproject.toml'
     # ref: https://github.com/rusty-dicom/dicom-echo/blob/faabe95b0b60c2936de99351656f470363bc96c4/pyproject.toml#L604
-    - run: poetry ${{ inputs.poe-task }}
+    - run: poetry ${{ inputs.command }}
       shell: sh
 
     # strip arguments from the task when naming the artifacts
     - id: artifacts
       if: ${{ inputs.artifacts }}
       env:
-        POE_TASK: ${{ inputs.poe-task }}
+        POE_TASK: ${{ inputs.command }}
       run: printf 'name=%s-%s-py%s\n'
         "${POE_TASK% *}"
         "${{ inputs.artifacts }}"
