@@ -1,5 +1,5 @@
 # Run this workflow to test Python code changes.
-name: 🎨 poe (push)
+name: 🎨 poetry (push)
 
 on:
   push:
@@ -231,7 +231,7 @@ jobs:
   test-pypi:
     environment:
       name: test.pypi.org
-      url: https://test.pypi.org/p/config-ninja
+      url: https://test.pypi.org/p/dicom-echo
 
     if: needs.check.outputs.release != 'true'  && github.ref_type == 'tag'
     needs:
@@ -254,7 +254,7 @@ jobs:
   pypi:
     environment:
       name: pypi.org
-      url: https://pypi.org/p/config-ninja
+      url: https://pypi.org/p/dicom-echo
 
     if: github.ref_type == 'tag'
     needs:
