@@ -148,26 +148,42 @@ jobs:
           artifact_name: github-pages
 
   build:
-    name: Build wheels-${{ matrix.wheels }}-${{ matrix.target }} on ${{ matrix.runner }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        runner: [ubuntu-latest]
-        manylinux: [auto, musllinux_1_2]
-        target: [x86_64, x86, aarch64, armv7, s390x, ppc64le]
+    # ref: https://github.com/pydantic/pydantic-core/blob/ba8eab4acba8ad04c45f27a58a5d001c8f212361/.github/workflows/ci.yml#L395-L499
+    env:
+      INTERPRETER: ${{ matrix.interpreter || '3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10' }}
+      MANY_LINUX: ${{ contains('linux', matrix.os) && ( matrix.manylinux || 'auto' ) || null }}
+      OS: ${{ matrix.os || 'linux' }}
 
+    name: build ${{ matrix.os }} ${{ matrix.manylinux }} ${{ matrix.target }}
+    runs-on: ${{ contains('linux', matrix.os) && 'ubuntu' || matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos, linux, windows] # default: linux
+        manylinux: [auto, musllinux_1_1, musllinux_1_2] # default: 'auto' if linux, or 'null' otherwise
+        python-architecture: [x64] # default: 'x64'
+        target: [x86_64, aarch64]
+
+        # prettier-ignore
         exclude:
-          - { manylinux: musllinux_1_2, target: s390x }
-          - { manylinux: musllinux_1_2, target: ppc64le }
+          - { os: macos,                    manylinux: musllinux_1_1                                                    }
+          - { os: macos,                    manylinux: musllinux_1_2                                                    }
+          - { os: windows,                  manylinux: musllinux_1_1                                                    }
+          - { os: windows,                  manylinux: musllinux_1_2                                                    }
 
         # prettier-ignore
         include:
-          - {                                          manylinux: auto,          wheels: linux }
-          - {                                          manylinux: musllinux_1_2, wheels: musllinux }
-          - { runner: macos-12,       target: x86_64,                            wheels: macos }
-          - { runner: macos-14,       target: aarch64,                           wheels: macos }
-          - { runner: windows-latest, target: x86,                               wheels: windows }
-          - { runner: windows-latest, target: x64,                               wheels: windows }
+          # manylinux for various platforms
+          - { os: linux,   target: i686                                                                                 }
+          - { os: linux,   target: armv7,   interpreter: 3.8 3.9 3.10 3.11 3.12 3.13                                    }
+          - { os: linux,   target: ppc64le, interpreter: 3.8 3.9 3.10 3.11 3.12 3.13                                    }
+          - { os: linux,   target: s390x,   interpreter: 3.8 3.9 3.10 3.11 3.12 3.13                                    }
+
+          # windows
+          - { os: windows, target: x86,     interpreter: 3.8 3.9 3.10 3.11 3.12 3.13, python-architecture: x86          }
+          - { os: windows, target: i686,    interpreter: 3.8 3.9 3.10 3.11 3.12 3.13, python-architecture: x86          }
+          - { os: windows, target: aarch64, interpreter: 3.11 3.12 3.13                                                 }
+          - { os: windows, target: x64                                                                                  }
 
     steps:
       - uses: actions/checkout@v4
@@ -177,7 +193,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          architecture: ${{ matrix.runner == 'windows-latest' && matrix.target || null }}
+          architecture: ${{ matrix.python-architecture || 'x64' }}
           python-version: 3.x
 
       - uses: ./.github/actions/poetry
@@ -188,14 +204,15 @@ jobs:
 
       - uses: PyO3/maturin-action@v1
         with:
-          target: ${{ matrix.target }}
-          args: --release --out dist --find-interpreter
+          args: --release --out dist --interpreter ${{ env.INTERPRETER  }}
+          manylinux: ${{ env.MANY_LINUX }}
+          rust-toolchain: stable
           sccache: "true"
-          manylinux: ${{ matrix.manylinux}}
+          target: ${{ matrix.target }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ matrix.wheels }}-${{ matrix.target }}
+          name: build ${{ env.OS }} ${{ env.MANY_LINUX }} ${{ matrix.target }}
           path: dist
 
   sdist:
@@ -209,7 +226,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: wheels-sdist
+          name: sdist
           path: dist
 
   test-pypi:
