@@ -7,9 +7,7 @@ name = "dicom-echo"
 description = "A lightweight, cross-platform, blazingly fast implementation of the C-ECHO DICOM procedure. 🔥"
 readme = "README.md"
 license = { file = "LICENSE.md" }
-authors = [
-  { name = "Bryant Finney", email = "bryant.finney@outlook.com" },
-]
+authors = [ { name = "Bryant Finney", email = "bryant.finney@outlook.com" } ]
 requires-python = ">=3.8.1,<4"
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
@@ -83,9 +81,7 @@ mdformat-frontmatter = "^2.0.8"
 mdformat-footnote = "^0.1.1"
 
 [tool.poetry.group.test.dependencies]
-coverage = { extras = [
-  "toml",
-], version = ">=6.4,<8.0" }
+coverage = { extras = [ "toml" ], version = ">=6.4,<8.0" }
 pytest = ">=7.4.4,<9.0.0"
 pytest-clarity = "^1.0.1"
 pytest-cov = ">=3,<6"
@@ -119,15 +115,8 @@ python-source = "src"
 
 [tool.ruff]
 line-length = 120
-src = [
-  "echoscu",
-  "src",
-  "tests",
-]
-
-extend-include = [
-  "*.ipynb",
-]
+src = [ "echoscu", "src", "tests" ]
+extend-include = [ "*.ipynb" ]
 fix = true
 show-fixes = true
 output-format = "full"
@@ -679,13 +668,16 @@ post_publish = "maturin-upload"
 
 [tool.poe.tasks]
 _version.cmd = "poetry version --short"
-_missing_cargo.shell = "command -v cargo >/dev/null || echo cargo not found"
+
+[tool.poe.tasks.which-cargo]
+expr = "shutil.which('cargo') or ''"
+imports = [ "shutil" ]
 
 [tool.poe.tasks.cargo]
 help = "Invoke <c1>cargo</c1> commands after applying `poetry-dynamic-versioning` substitutions"
-shell = """test -n "$CARGO_MISSING" || cargo $cmd"""
-args = [ { name = "cmd", positional = true } ]
-uses = { CARGO_MISSING = "_missing_cargo" }
+expr = "subprocess.check_output([${CARGO}, *sys.argv[1:]], encoding='utf-8') if ${CARGO} else ''"
+imports = [ "subprocess", "sys" ]
+uses = { CARGO = "which-cargo" }
 
 [tool.poe.tasks.check-for-prerelease]
 capture_stdout = "check-for-prerelease.out"
@@ -700,7 +692,7 @@ help = "Generate this package's docs"
 uses = { PACKAGE_VERSION = "_version" }
 
 [[tool.poe.tasks.docs.sequence]]
-ref = "cargo doc -- --target-dir ./docs"
+ref = "cargo doc --target-dir docs"
 
 [[tool.poe.tasks.docs.sequence]]
 ref = "docs-serve --output-directory ./docs"
@@ -807,13 +799,13 @@ cmd = "maturin build --out dist --sdist"
 [tool.poe.tasks.maturin-develop]
 help = "Install the crate as a module in the poetry-managed virtualenv"
 shell = """
-  if [ -n "$CARGO_MISSING" ]; then
+  if [ -z "${CARGO}" ]; then
     poetry pth
   else
     maturin develop
   fi
 """
-uses = { CARGO_MISSING = "_missing_cargo" }
+uses = { CARGO = "which-cargo" }
 
 [tool.poe.tasks.maturin-upload]
 help = "Invoke <c1>maturin upload</c1> to publish this package to a PyPI registry"

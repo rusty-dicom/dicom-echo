@@ -105,9 +105,10 @@ jobs:
           path: docs
 
       - uses: ./.github/actions/poetry
-        with:
-          artifacts: ""
-          command: setup-versioning
+        with: { artifacts: "", command: setup-versioning }
+
+      - uses: ./.github/actions/poetry
+        with: { artifacts: "", command: dynamic-versioning }
 
       - uses: ./.github/actions/poetry
         with:
@@ -192,7 +193,6 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          architecture: ${{ matrix.python-architecture || 'x64' }}
           python-version: 3.x
 
       - uses: ./.github/actions/poetry
@@ -218,6 +218,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - uses: ./.github/actions/poetry
+        with: { artifacts: "", command: setup-versioning, groups: build }
+
+      - uses: ./.github/actions/poetry
+        with: { artifacts: "", command: dynamic-versioning, groups: build }
+
       - uses: PyO3/maturin-action@v1
         with:
           command: sdist

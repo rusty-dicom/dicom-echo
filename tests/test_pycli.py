@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import subprocess
+import sys
 from typing import TYPE_CHECKING
 
 import rich.emoji
@@ -54,6 +56,10 @@ def test_version() -> None:
 
 def test_version_called_as_module() -> None:
     """Test the CLI output when the utility is invoked as a Python module."""
+    out = subprocess.check_output([sys.executable, '-m', 'dicom_echo', '--version'], text=True)
+
+    assert 'dicom_echo' in out
+    assert echo.__version__ in out
 
 
 def test_host_aetitle(mock_send_rc0: MagicMock) -> None:
