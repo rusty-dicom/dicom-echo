@@ -168,6 +168,7 @@ jobs:
         exclude:
           - { os: macos,                    manylinux: musllinux_1_1                                                    }
           - { os: macos,                    manylinux: musllinux_1_2                                                    }
+          - { os: windows, target: aarch64                                                                              }
 
         # prettier-ignore
         include:
@@ -180,7 +181,6 @@ jobs:
           # windows
           - { os: windows, target: i686,    interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86 }
           - { os: windows, target: x86,     interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86 }
-          - { os: windows, target: aarch64, interpreter:     3.9 3.10 3.11 3.12                           }
           - { os: windows, target: x86_64,  interpreter: 3.8 3.9 3.10 3.11 3.12                           }
           - { os: windows, target: x64,     interpreter: 3.8 3.9 3.10 3.11 3.12                           }
 
