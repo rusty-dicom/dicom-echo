@@ -36,6 +36,14 @@ classifiers = [
 
 dynamic = [ "version" ]
 dependencies = [ "typer~=0.12.5", "typing-extensions~=4.12.2; python_version<'3.9'" ]
+
+urls.changelog = "https://github.com/rusty-dicom/dicom-echo/releases"
+urls.documentation = "https://rusty-dicom.github.io/dicom-echo/dicom_echo.html"
+urls.homepage = "https://github.com/rusty-dicom/dicom-echo"
+urls.issues = "https://github.com/rusty-dicom/dicom-echo/issues"
+urls.readthedocs = "https://dicom-echo.readthedocs.io/home.html"
+urls.source = "https://github.com/rusty-dicom/dicom-echo"
+
 scripts.dicom-echo = "dicom_echo.cli:app"
 
 [tool.poetry]
