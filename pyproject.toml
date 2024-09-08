@@ -671,11 +671,13 @@ post_publish = "maturin-upload"
 
 [tool.poe.tasks]
 _version.cmd = "poetry version --short"
+_missing_cargo.shell = "command -v cargo >/dev/null || echo cargo not found"
 
 [tool.poe.tasks.cargo]
 help = "Invoke <c1>cargo</c1> commands after applying `poetry-dynamic-versioning` substitutions"
-shell = "! command -v cargo >/dev/null || cargo $cmd"
+shell = """test -n "$CARGO_MISSING" || cargo $cmd"""
 args = [ { name = "cmd", positional = true } ]
+uses = { CARGO_MISSING = "_missing_cargo" }
 
 [tool.poe.tasks.check-for-prerelease]
 capture_stdout = "check-for-prerelease.out"
@@ -717,6 +719,16 @@ cmd = """
     --footer "$PACKAGE_VERSION"
     --mermaid
 """
+
+[tool.poe.tasks.pth]
+help = "Generate a .pth file to add this package to the Python path"
+expr = """
+  (pathlib.Path(site.getsitepackages()[0]) / 'dicom_echo.pth').write_text(
+    str(pathlib.Path.cwd().resolve() / 'src') + '\\n'
+  )
+"""
+imports = [ "pathlib", "site" ]
+assert = true
 
 [tool.poe.tasks.lint]
 help = "Lint this package"
@@ -786,7 +798,14 @@ cmd = "maturin build --out dist --sdist"
 
 [tool.poe.tasks.maturin-develop]
 help = "Install the crate as a module in the poetry-managed virtualenv"
-shell = "! command -v cargo >/dev/null || maturin develop"
+shell = """
+  if [ -n "$CARGO_MISSING" ]; then
+    poetry pth
+  else
+    maturin develop
+  fi
+"""
+uses = { CARGO_MISSING = "_missing_cargo" }
 
 [tool.poe.tasks.maturin-upload]
 help = "Invoke <c1>maturin upload</c1> to publish this package to a PyPI registry"

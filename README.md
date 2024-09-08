@@ -37,30 +37,30 @@ To send a `C-ECHO` request to `localhost:11111`:
  The `C-ECHO` procedure functions like a `ping`, serving to test that the peer SCP is
  accepting associations.
 
- This command will fail if the peer SCP is unreachable or rejects the association request for
- the given AE titles.
+ This command will fail if the peer SCP is unreachable or rejects the association request
+ for the given AE titles.
 
  Reference: https://www.dicomstandard.org/standards/view/message-exchange#sect_9.1.5
 
-╭─ Arguments ────────────────────────────────────────────────────────────────────────────────╮
-│ *    host      TEXT  The socket address of the peer SCP: {host}:{port}                     │
-│                      Optionally, the AE title may be included: {AE title}@{host}:{port}    │
-│                      [required]                                                            │
-╰────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────╮
-│ --version             -V        display the version of this program                        │
-│ --install-completion            Install completion for the current shell.                  │
-│ --show-completion               Show completion for the current shell, to copy it or       │
-│                                 customize the installation.                                │
-│ --help                -h        Show this message and exit.                                │
-╰────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ DICOM Options ────────────────────────────────────────────────────────────────────────────╮
-│ --called,--called-ae-title    -aec      TEXT     peer AE title of the host SCP             │
-│                                                  [default: ANY-SCP]                        │
-│ --calling,--calling-ae-title  -aet      TEXT     the AE title of this client               │
-│                                                  [default: ECHOSCU]                        │
-│ --id,--message-id             -id       INTEGER  the message ID to send [default: 1]       │
-╰────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────╮
+│ *    host      TEXT  The socket address of the peer SCP: {host}:{port}                   │
+│                      Optionally, the AE title may be included: {AE title}@{host}:{port}  │
+│                      [required]                                                          │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────╮
+│ --version             -V        display the version of this program                      │
+│ --install-completion            Install completion for the current shell.                │
+│ --show-completion               Show completion for the current shell, to copy it or     │
+│                                 customize the installation.                              │
+│ --help                -h        Show this message and exit.                              │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ DICOM Options ──────────────────────────────────────────────────────────────────────────╮
+│ --called,--called-ae-title    -aec      TEXT     peer AE title of the host SCP           │
+│                                                  [default: ANY-SCP]                      │
+│ --calling,--calling-ae-title  -aet      TEXT     the AE title of this client             │
+│                                                  [default: ECHOSCU]                      │
+│ --id,--message-id             -id       INTEGER  the message ID to send [default: 1]     │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## API Usage

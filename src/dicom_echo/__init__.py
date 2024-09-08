@@ -15,8 +15,31 @@ A simple CLI for sending `C-ECHO` messages. Built with `typer`.
 
 from __future__ import annotations
 
-from dicom_echo.backend import DEFAULT_CALLED_AE_TITLE, DEFAULT_CALLING_AE_TITLE  # pylint: disable=no-name-in-module
-from dicom_echo.backend import send as __send  # pylint: disable=no-name-in-module
+import sys
+
+if not sys.argv[0].endswith('pdoc'):
+    from dicom_echo.backend import (  # pylint: disable=no-name-in-module
+        DEFAULT_CALLED_AE_TITLE,
+        DEFAULT_CALLING_AE_TITLE,
+    )
+    from dicom_echo.backend import send as __send  # pylint: disable=no-name-in-module
+else:
+    DEFAULT_CALLED_AE_TITLE = 'ANY-SCP'  # pyright: ignore[reportConstantRedefinition]
+    DEFAULT_CALLING_AE_TITLE = 'ECHOSCU'  # pyright: ignore[reportConstantRedefinition]
+
+    def __send(
+        address: str,
+        /,
+        called_ae_title: str = DEFAULT_CALLED_AE_TITLE,
+        calling_ae_title: str = DEFAULT_CALLING_AE_TITLE,
+        message_id: int = 1,
+    ) -> int:
+        """Send a `C-ECHO` message to the given address.
+
+        Reference: [DICOM Standard Part 7, Section 9.1.5](https://www.dicomstandard.org/standards/view/message-exchange#sect_9.1.5)
+        """
+        return 0
+
 
 __all__ = ['DEFAULT_CALLED_AE_TITLE', 'DEFAULT_CALLING_AE_TITLE', 'send']
 

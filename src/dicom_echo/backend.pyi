@@ -1,9 +1,9 @@
 from typing import Literal
 
-DEFAULT_CALLED_AE_TITLE: Literal['ANY-SCP']
+DEFAULT_CALLED_AE_TITLE: Literal['ANY-SCP'] = 'ANY-SCP'
 """By default, specify this AE title for the target SCP."""
 
-DEFAULT_CALLING_AE_TITLE: Literal['ECHOSCU']
+DEFAULT_CALLING_AE_TITLE: Literal['ECHOSCU'] = 'ECHOSCU'
 """By default, specify this AE title for the SCU sending the `C-ECHO` message."""
 
 def send(
