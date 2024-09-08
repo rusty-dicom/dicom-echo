@@ -211,7 +211,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: build ${{ env.OS }} ${{ env.MANY_LINUX }} ${{ matrix.target }}
+          name: build-${{ env.OS }}-${{ env.MANY_LINUX }}-${{ matrix.target }}
           path: dist
 
   sdist:
@@ -225,7 +225,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: sdist
+          name: build-sdist
           path: dist
 
   test-pypi:
@@ -246,6 +246,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: build-*
+          merge-multiple: true
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
@@ -265,5 +269,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: build-*
+          merge-multiple: true
 
       - uses: pypa/gh-action-pypi-publish@release/v1
