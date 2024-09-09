@@ -4,6 +4,8 @@ default_stages: [commit, manual]
 fail_fast: false
 ci:
   skip:
+    - cargo-fmt
+    - check-poetry-lock
     - pyright
     - shellcheck
     - poetry-check
