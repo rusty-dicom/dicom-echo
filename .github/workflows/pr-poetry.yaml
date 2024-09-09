@@ -32,3 +32,9 @@ jobs:
           command: test --error-for-skips
           groups: main,build,test
           python-version: ${{ matrix.py }}
+
+      - if: always()
+        name: Upload coverage reports to codecov.io
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
