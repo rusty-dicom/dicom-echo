@@ -1806,13 +1806,13 @@ test = ["pytest"]
 
 [[package]]
 name = "pyproject-fmt"
-version = "2.2.1"
+version = "2.2.3"
 description = "Format your pyproject.toml file"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pyproject_fmt-2.2.1-py3-none-any.whl", hash = "sha256:ec9d00df6238027c6f7ea09c403cd1030d8e0f87b97110d7d880864ebdbe278f"},
-    {file = "pyproject_fmt-2.2.1.tar.gz", hash = "sha256:0b69d314bb28028596b1dcdd58300122613d6ffcb492becb297ab62f7ea27e60"},
+    {file = "pyproject_fmt-2.2.3-py3-none-any.whl", hash = "sha256:fbf3e011dfb2db9f9a1acb0756ec495c7d17cd951301aa2d79c0e9a83babd978"},
+    {file = "pyproject_fmt-2.2.3.tar.gz", hash = "sha256:3d945f0da21faf7c2182a71ef082ffda76aa6cd03d920e019d38b24c4e98c7fe"},
 ]
 
 [package.dependencies]
@@ -1820,7 +1820,7 @@ pyproject-fmt-rust = "1.1.6"
 tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
 
 [package.extras]
-docs = ["furo (>=2024.7.18)", "sphinx (>=7.4.4)", "sphinx-argparse-cli (>=1.16)", "sphinx-autodoc-typehints (>=2.2.3)", "sphinx-copybutton (>=0.5.2)"]
+docs = ["furo (>=2024.8.6)", "sphinx (>=8.0.2)", "sphinx-argparse-cli (>=1.17)", "sphinx-autodoc-typehints (>=2.4)", "sphinx-copybutton (>=0.5.2)"]
 test = ["covdefaults (>=2.3)", "pytest (>=8.3.2)", "pytest-cov (>=5)", "pytest-mock (>=3.14)"]
 
 [[package]]
@@ -2684,4 +2684,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "b6b4f65fb78d4c6a2655d453b8fef8f3712c54382e138774ba13335ad8d91479"
+content-hash = "0e63b56c1197806e9acc03c3ef88fb110f6da157ab8a90589cfee6fc97dfafbd"
