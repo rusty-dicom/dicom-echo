@@ -1,5 +1,5 @@
 # Run this workflow to test Python code changes.
-name: 🎨 poe (PR)
+name: 🎨 poetry (PR)
 
 on:
   pull_request:
@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
-          poe-task: lint
-          poetry-groups: main,build,test,lint
+          command: lint
+          groups: main,build,test,lint
 
   test:
     runs-on: ubuntu-latest
@@ -27,8 +27,8 @@ jobs:
         with:
           command: install dicom-storescp
 
-      - uses: ./.github/actions/poe
+      - uses: ./.github/actions/poetry
         with:
-          poe-task: test --error-for-skips
-          poetry-groups: main,build,test
+          command: test --error-for-skips
+          groups: main,build,test
           python-version: ${{ matrix.py }}
