@@ -6,7 +6,7 @@
 ## `dicom_echo.backend`
 
 This module is built with Rust and provides the core functionality for sending `C-ECHO` messages. See
-[/backend/](./backend/index.html) for the crate's documentation.
+[/doc/backend/](./doc/backend/index.html) for the crate's documentation.
 
 ## `dicom_echo.cli`
 
