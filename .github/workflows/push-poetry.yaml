@@ -3,7 +3,7 @@ name: 🎨 poetry (push)
 
 on:
   push:
-    branches: [main, ci/refactor]
+    branches: [main]
     tags: [v*]
 
 jobs:

@@ -1,6 +1,15 @@
 # DICOM Echo
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![🎨 poetry (push)](https://github.com/rusty-dicom/dicom-echo/actions/workflows/push-poetry.yaml/badge.svg)](https://github.com/rusty-dicom/dicom-echo/actions/workflows/push-poetry.yaml)
+[![pylint](https://rusty-dicom.github.io/dicom-echo/reports/pylint.svg)](https://rusty-dicom.github.io/dicom-echo/reports/pylint-report.txt)
+[![codecov](https://codecov.io/gh/rusty-dicom/dicom-echo/graph/badge.svg?token=BuC4vpbbD0)](https://codecov.io/gh/rusty-dicom/dicom-echo)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/rusty-dicom/dicom-echo/main.svg)](https://results.pre-commit.ci/latest/github/rusty-dicom/dicom-echo/main)
+[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://rusty-dicom.github.io/dicom-echo/reports/mypy-html)
+[![docs: pdoc](https://img.shields.io/badge/docs-pdoc-blueviolet?logo=github)](https://rusty-dicom.github.io/dicom-echo/dicom_echo.html)
+[![readthedocs](https://readthedocs.org/projects/dicom-echo/badge/?version=latest)](https://dicom-echo.readthedocs.io/en/latest/home.html)
+[![PyPI version](https://badge.fury.io/py/dicom-echo.svg)](https://badge.fury.io/py/dicom-echo)
+[![Downloads](https://static.pepy.tech/badge/dicom-echo)](https://pepy.tech/project/dicom-echo)
 
 A lightweight, cross-platform, blazingly fast implementation of the `C-ECHO`[^1] DICOM procedure. 🔥
 

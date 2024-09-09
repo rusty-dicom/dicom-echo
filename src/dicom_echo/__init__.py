@@ -1,5 +1,5 @@
 """.. include:: ../../README.md
-  :start-line: 3
+  :start-line: 2
 
 # Submodules
 
