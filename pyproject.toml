@@ -62,7 +62,7 @@ pynvim = "^0.5.0"
 ipykernel = "^6.29.5"
 maturin-import-hook = "^0.1.0"
 pytest-watch = "^4.2.0"
-pdoc = "^14.6.1"
+pdoc = "^14.7.0"
 
 [tool.poetry.group.lint.dependencies]
 anybadge = "^1.14"
