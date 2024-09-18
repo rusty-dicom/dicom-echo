@@ -1806,13 +1806,13 @@ test = ["pytest"]
 
 [[package]]
 name = "pyproject-fmt"
-version = "2.2.3"
+version = "2.2.4"
 description = "Format your pyproject.toml file"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pyproject_fmt-2.2.3-py3-none-any.whl", hash = "sha256:fbf3e011dfb2db9f9a1acb0756ec495c7d17cd951301aa2d79c0e9a83babd978"},
-    {file = "pyproject_fmt-2.2.3.tar.gz", hash = "sha256:3d945f0da21faf7c2182a71ef082ffda76aa6cd03d920e019d38b24c4e98c7fe"},
+    {file = "pyproject_fmt-2.2.4-py3-none-any.whl", hash = "sha256:fce43c2022e9986b3f183058c8f8487070a7d1db464daa0668c087b8b12e45a8"},
+    {file = "pyproject_fmt-2.2.4.tar.gz", hash = "sha256:c531066576ed28b09812b0c17ce01628bce6f9250ad711027960a72c4480affe"},
 ]
 
 [package.dependencies]
@@ -2684,4 +2684,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "8d44286b421add1a0f19648246667afa2871191fa8a9dc769a8f224e301329d2"
+content-hash = "9a25e71f4208d92ec28eff8ab92f31281027c0415ca521004cb55d849f30bd34"
