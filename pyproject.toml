@@ -72,7 +72,7 @@ pre-commit = [
   { version = ">=3.6", python = ">=3.9" },
 ]
 pylint = "^3.2"
-pyproject-fmt = "^2.2.3"
+pyproject-fmt = "^2.2.4"
 ruff = "^0.6.5"
 safety = ">=2.3,<4.0"
 shellcheck-py = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
