@@ -50,7 +50,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.5
+    rev: v0.6.7
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter, toml]
@@ -83,18 +83,18 @@ repos:
           - --write
 
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.1
+    rev: v1.7.2
     hooks:
       - id: actionlint
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "2.2.3"
+    rev: "2.2.4"
     hooks:
       - id: pyproject-fmt
         files: '.*\.toml$'
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.380
+    rev: v1.1.381
     hooks:
       - id: pyright
         additional_dependencies:
