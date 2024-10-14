@@ -1,6 +1,6 @@
 # https://pre-commit.com
 default_install_hook_types: [commit-msg, pre-commit, post-checkout, post-merge]
-default_stages: [commit, manual]
+default_stages: [pre-commit, manual]
 fail_fast: false
 ci:
   skip:
@@ -27,7 +27,7 @@ repos:
       - id: text-unicode-replacement-char
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
       - id: check-ast
@@ -50,7 +50,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.8
+    rev: v0.6.9
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter, toml]
@@ -88,13 +88,13 @@ repos:
       - id: actionlint
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "2.2.4"
+    rev: "2.3.1"
     hooks:
       - id: pyproject-fmt
         files: '.*\.toml$'
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.382.post1
+    rev: v1.1.384
     hooks:
       - id: pyright
         additional_dependencies:
@@ -110,7 +110,7 @@ repos:
       - id: validate-pyproject
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
+    rev: 0.7.18
     hooks:
       - id: mdformat
         additional_dependencies:
@@ -127,7 +127,7 @@ repos:
           - MD013
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.24.6
+    rev: v1.26.0
     hooks:
       - id: typos
 
