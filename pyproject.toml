@@ -24,6 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Rust",
   "Topic :: Scientific/Engineering",
   "Topic :: Scientific/Engineering :: Medical Science Apps.",
@@ -66,14 +67,14 @@ pdoc = "^14.7.0"
 
 [tool.poetry.group.lint.dependencies]
 anybadge = "^1.14"
-mypy = "^1.11.2"
+mypy = "^1.12.1"
 pre-commit = [
   { version = "<3.6", python = "<3.9" },
   { version = ">=3.6", python = ">=3.9" },
 ]
 pylint = "^3.2"
 pyproject-fmt = "^2.2.4"
-ruff = "^0.6.9"
+ruff = "^0.7.0"
 safety = ">=2.3,<4.0"
 shellcheck-py = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
 mdformat-gfm = "^0.3.6"
