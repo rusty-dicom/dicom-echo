@@ -67,7 +67,7 @@ pdoc = "^14.7.0"
 
 [tool.poetry.group.lint.dependencies]
 anybadge = "^1.14"
-mypy = "^1.12.1"
+mypy = "^1.13.0"
 pre-commit = [
   { version = "<3.6", python = "<3.9" },
   { version = ">=3.6", python = ">=3.9" },
