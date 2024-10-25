@@ -252,8 +252,13 @@ jobs:
   upload-assets:
     if: github.ref_type == 'tag'
     needs: [build, docs, sdist]
+
     permissions:
+      attestations: write
       contents: write
+      id-token: write
+      packages: read
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -262,7 +267,14 @@ jobs:
           pattern: build-*
           merge-multiple: true
 
-      - run: gh release upload ${{ github.ref_name }} dist/*
+      - id: attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: dist/*
+
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload ${{ github.ref_name }} dist/* ${{ steps.attestation.outputs.bundle-path }}
 
   test-pypi:
     environment:
