@@ -186,10 +186,11 @@ jobs:
           - { os: linux,   target: s390x,   interpreter: 3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10                   }
 
           # windows
-          - { os: windows, target: i686,    interpreter: 3.8 3.9 3.10 3.11 3.12 3.13, python-architecture: x86 }
-          - { os: windows, target: x86,     interpreter: 3.8 3.9 3.10 3.11 3.12 3.13, python-architecture: x86 }
-          - { os: windows, target: x86_64,  interpreter: 3.8 3.9 3.10 3.11 3.12 3.13                           }
-          - { os: windows, target: x64,     interpreter: 3.8 3.9 3.10 3.11 3.12 3.13                           }
+          # TODO: build py3.13
+          - { os: windows, target: i686,    interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86 }
+          - { os: windows, target: x86,     interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86 }
+          - { os: windows, target: x86_64,  interpreter: 3.8 3.9 3.10 3.11 3.12                           }
+          - { os: windows, target: x64,     interpreter: 3.8 3.9 3.10 3.11 3.12                           }
 
     steps:
       - uses: actions/checkout@v4
