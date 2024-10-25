@@ -274,7 +274,7 @@ jobs:
 
       - env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload ${{ github.ref_name }} dist/* ${{ steps.attestation.outputs.bundle-path }}
+        run: gh release upload --repo ${{ github.repository }} ${{ github.ref_name }} dist/* ${{ steps.attestation.outputs.bundle-path }}
 
   test-pypi:
     environment:
