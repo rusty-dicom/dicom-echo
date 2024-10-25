@@ -9,7 +9,7 @@
 [![docs: pdoc](https://img.shields.io/badge/docs-pdoc-blueviolet?logo=github)](https://rusty-dicom.github.io/dicom-echo/dicom_echo.html)
 [![readthedocs](https://readthedocs.org/projects/dicom-echo/badge/?version=latest)](https://dicom-echo.readthedocs.io/en/latest/home.html)
 [![PyPI version](https://badge.fury.io/py/dicom-echo.svg)](https://badge.fury.io/py/dicom-echo)
-[![Downloads](https://static.pepy.tech/badge/dicom-echo)](https://pepy.tech/project/dicom-echo)
+[![Downloads](https://static.pepy.tech/badge/dicom-echo/month)](https://pepy.tech/project/dicom-echo)
 
 A lightweight, cross-platform, blazingly fast implementation of the `C-ECHO`[^1] DICOM procedure. 🔥
 
