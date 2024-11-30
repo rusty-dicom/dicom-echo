@@ -1809,22 +1809,23 @@ testutils = ["gitpython (>3)"]
 
 [[package]]
 name = "pynvim"
-version = "0.5.0"
+version = "0.5.2"
 description = "Python client for Neovim"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pynvim-0.5.0-py2.py3-none-any.whl", hash = "sha256:2ac197ef0cdfff53719184a45c33cfb7cef88d1c9bf7f0525c21b3239cb5365f"},
-    {file = "pynvim-0.5.0.tar.gz", hash = "sha256:e80a11f6f5d194c6a47bea4135b90b55faca24da3544da7cf4a5f7ba8fb09215"},
+    {file = "pynvim-0.5.2-py3-none-any.whl", hash = "sha256:20b1c5a18c4cddfc480950094d4135f782b1a98c32149ea63e24bbdb7021eb54"},
+    {file = "pynvim-0.5.2.tar.gz", hash = "sha256:734a2432db8683519f58572617528ecb4a2f321bc7b27f034b3f9b2322c15615"},
 ]
 
 [package.dependencies]
-greenlet = ">=3.0"
+greenlet = {version = ">=3.0", markers = "platform_python_implementation != \"PyPy\""}
 msgpack = ">=0.5.0"
+typing-extensions = {version = ">=4.5", markers = "python_version < \"3.12\""}
 
 [package.extras]
-pyuv = ["pyuv (>=1.0.0)"]
-test = ["pytest"]
+docs = ["sphinx", "sphinx-rtd-theme"]
+test = ["pytest", "pytest-timeout"]
 
 [[package]]
 name = "pyproject-fmt"
@@ -2706,4 +2707,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "7e425ae21483c3073d5485d1ea0f4b9501a1e8e452a87753acf6c0e934c77fc9"
+content-hash = "e81697d96df5e881773e77028b0ed4100f37d99a8fae29dc58a6deb0cb76e873"
