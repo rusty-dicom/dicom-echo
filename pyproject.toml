@@ -56,10 +56,10 @@ typer = "^0.12.5"
 typing-extensions = { version = "^4.12.2", python = "<3.9" }
 
 [tool.poetry.group.build.dependencies]
-maturin = "^1.7.4"
+maturin = "^1.7.6"
 
 [tool.poetry.group.dev.dependencies]
-pynvim = "^0.5.0"
+pynvim = "^0.5.2"
 ipykernel = "^6.29.5"
 maturin-import-hook = "^0.1.0"
 pytest-watch = "^4.2.0"
@@ -74,7 +74,7 @@ pre-commit = [
 ]
 pylint = "^3.2"
 pyproject-fmt = "^2.2.4"
-ruff = "^0.7.1"
+ruff = "^0.8.1"
 safety = ">=2.3,<4.0"
 shellcheck-py = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
 mdformat-gfm = "^0.3.6"
