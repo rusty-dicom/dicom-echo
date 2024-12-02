@@ -50,7 +50,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
+    rev: v0.8.1
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter, toml]
@@ -127,7 +127,7 @@ repos:
           - MD013
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.28.0
+    rev: typos-dict-v0.11.37
     hooks:
       - id: typos
 
