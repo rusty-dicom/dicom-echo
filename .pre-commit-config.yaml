@@ -50,7 +50,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
+    rev: v0.8.3
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter, toml]
@@ -94,7 +94,7 @@ repos:
         files: '.*\.toml$'
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.389
+    rev: v1.1.390
     hooks:
       - id: pyright
         additional_dependencies:
@@ -127,7 +127,7 @@ repos:
           - MD013
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.28.0
+    rev: v1.28.3
     hooks:
       - id: typos
 
