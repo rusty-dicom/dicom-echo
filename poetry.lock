@@ -16,13 +16,13 @@ typing-extensions = {version = ">=4.0.0", markers = "python_version < \"3.9\""}
 
 [[package]]
 name = "anybadge"
-version = "1.15.6"
+version = "1.16.0"
 description = "Simple, flexible badge generator for project badges."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "anybadge-1.15.6-py3-none-any.whl", hash = "sha256:4df3f672e4875e799aba1ab5008a44d695da7ef030287d277079c30c50f845b1"},
-    {file = "anybadge-1.15.6.tar.gz", hash = "sha256:4c9696f4c12c8f1461311b5c7f1eb5287cb444cb9f7231fe9a0e810e4dce2c93"},
+    {file = "anybadge-1.16.0-py3-none-any.whl", hash = "sha256:bc9ef2e20d875ee09237a15250a17b6fd7e67276f083d32a297963cdec179918"},
+    {file = "anybadge-1.16.0.tar.gz", hash = "sha256:f4e95eca834482f9932f9020ac2fe04a5ca863728b446324a8d35b1e67faab71"},
 ]
 
 [package.dependencies]
@@ -2714,4 +2714,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "bb16cd6d0815a49042fb1a6a40b011a5a8900827b827b47051021486aee28d36"
+content-hash = "146b1c6d65290585d9cbb490e7703fbc0c626d160837440ce8eb139f6cb8572f"
