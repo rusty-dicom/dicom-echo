@@ -1,3 +1,4 @@
+---
 # Run this workflow to test Python code changes.
 name: 🎨 poetry (push)
 
@@ -19,7 +20,7 @@ jobs:
   test:
     strategy:
       matrix:
-        py: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        py: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
 
     runs-on: ubuntu-latest
     steps:
@@ -49,7 +50,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/poetry
         with:
-          artifacts: ""
+          artifacts: ''
           command: check-for-prerelease
 
       - id: check
@@ -57,10 +58,7 @@ jobs:
 
   release:
     if: needs.check.outputs.release == 'true'
-    needs:
-      - lint
-      - test
-      - check
+    needs: [lint, test, check]
 
     outputs:
       new: ${{ steps.semantic-release.outputs.released }}
@@ -88,10 +86,7 @@ jobs:
 
   docs:
     if: needs.check.outputs.release != 'true'
-    needs:
-      - lint
-      - test
-      - check
+    needs: [lint, test, check]
 
     runs-on: ubuntu-latest
     steps:
@@ -111,14 +106,14 @@ jobs:
           path: docs
 
       - uses: ./.github/actions/poetry
-        with: { artifacts: "", command: setup-versioning }
+        with: {artifacts: '', command: setup-versioning}
 
       - uses: ./.github/actions/poetry
-        with: { artifacts: "", command: dynamic-versioning }
+        with: {artifacts: '', command: dynamic-versioning}
 
       - uses: ./.github/actions/poetry
         with:
-          artifacts: ""
+          artifacts: ''
           command: docs
 
       - name: Fix permissions
@@ -139,9 +134,7 @@ jobs:
       name: GitHub Pages
       url: ${{ steps.deploy.outputs.page_url }}
 
-    needs:
-      - check
-      - docs
+    needs: [check, docs]
 
     permissions:
       pages: write
@@ -166,31 +159,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos, linux] # default: linux
-        manylinux: [auto, musllinux_1_1, musllinux_1_2] # default: 'auto' if linux, or 'null' otherwise
+        os: [macos, linux]  # default: linux
+        manylinux: [auto, musllinux_1_1, musllinux_1_2]  # default: 'auto' if linux, or 'null' otherwise
         python-architecture: [x64] # default: 'x64'
         target: [x86_64, aarch64]
 
         # prettier-ignore
         exclude:
-          - { os: macos,                    manylinux: musllinux_1_1                                                    }
-          - { os: macos,                    manylinux: musllinux_1_2                                                    }
-          - { os: windows, target: aarch64                                                                              }
+          - {os: macos, manylinux: musllinux_1_1}
+          - {os: macos, manylinux: musllinux_1_2}
+          - {os: windows, target: aarch64}
 
         # prettier-ignore
         include:
           # manylinux for various platforms
-          - { os: linux,   target: i686                                                                                 }
-          - { os: linux,   target: armv7,   interpreter: 3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10                   }
-          - { os: linux,   target: ppc64le, interpreter: 3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10                   }
-          - { os: linux,   target: s390x,   interpreter: 3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10                   }
+          - {os: linux, target: i686}
+          - {os: linux, target: armv7, interpreter: 3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10}
+          - {os: linux, target: ppc64le, interpreter: 3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10}
+          - {os: linux, target: s390x, interpreter: 3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10}
 
           # windows
           # TODO: build py3.13
-          - { os: windows, target: i686,    interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86 }
-          - { os: windows, target: x86,     interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86 }
-          - { os: windows, target: x86_64,  interpreter: 3.8 3.9 3.10 3.11 3.12                           }
-          - { os: windows, target: x64,     interpreter: 3.8 3.9 3.10 3.11 3.12                           }
+          - {os: windows, target: i686, interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86}
+          - {os: windows, target: x86, interpreter: 3.8 3.9 3.10 3.11 3.12, python-architecture: x86}
+          - {os: windows, target: x86_64, interpreter: 3.8 3.9 3.10 3.11 3.12}
+          - {os: windows, target: x64, interpreter: 3.8 3.9 3.10 3.11 3.12}
 
     steps:
       - uses: actions/checkout@v4
@@ -203,17 +196,17 @@ jobs:
           python-version: 3.x
 
       - uses: ./.github/actions/poetry
-        with: { artifacts: "", command: setup-versioning, groups: build }
+        with: {artifacts: '', command: setup-versioning, groups: build}
 
       - uses: ./.github/actions/poetry
-        with: { artifacts: "", command: dynamic-versioning, groups: build }
+        with: {artifacts: '', command: dynamic-versioning, groups: build}
 
       - uses: PyO3/maturin-action@v1
         with:
           args: --release --out dist --interpreter ${{ env.INTERPRETER  }}
           manylinux: ${{ env.MANY_LINUX }}
           rust-toolchain: stable
-          sccache: "true"
+          sccache: 'true'
           target: ${{ matrix.target }}
 
       - uses: actions/upload-artifact@v4
@@ -234,10 +227,10 @@ jobs:
           python-version: 3.x
 
       - uses: ./.github/actions/poetry
-        with: { artifacts: "", command: setup-versioning, groups: build }
+        with: {artifacts: '', command: setup-versioning, groups: build}
 
       - uses: ./.github/actions/poetry
-        with: { artifacts: "", command: dynamic-versioning, groups: build }
+        with: {artifacts: '', command: dynamic-versioning, groups: build}
 
       - uses: PyO3/maturin-action@v1
         with:
@@ -282,12 +275,7 @@ jobs:
       url: https://test.pypi.org/p/dicom-echo
 
     if: github.ref_type == 'tag'
-    needs:
-      - check
-      - lint
-      - test
-      - build
-      - sdist
+    needs: [check, lint, test, build, sdist]
 
     permissions:
       id-token: write
@@ -309,8 +297,7 @@ jobs:
       url: https://pypi.org/p/dicom-echo
 
     if: github.ref_type == 'tag'
-    needs:
-      - test-pypi
+    needs: [test-pypi]
 
     permissions:
       id-token: write
