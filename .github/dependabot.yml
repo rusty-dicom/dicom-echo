@@ -13,6 +13,17 @@ updates:
     schedule:
       interval: daily
 
+  - commit-message:
+      prefix: deps
+      prefix-development: chore(dev-deps)
+    directory: /
+    open-pull-requests-limit: 10
+    package-ecosystem: cargo
+    reviewers: [bryant-finney]
+    rebase-strategy: auto
+    schedule:
+      interval: daily
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
