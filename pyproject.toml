@@ -47,7 +47,6 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python",
   "Programming Language :: Rust",
   "Topic :: Scientific/Engineering :: Medical Science Apps.",
@@ -61,7 +60,7 @@ description     = "A lightweight, cross-platform, blazingly fast implementation 
 license-files   = ["LICENSE.md"]
 name            = "dicom-echo"
 readme          = "README.md"
-requires-python = ">=3.9.1,<4"
+requires-python = ">=3.10,<4"
 
 dependencies = ["typer (==0.16)", "typing-extensions>=4.14.1; python_version < '3.10'"]
 dynamic      = ["version"]
@@ -81,7 +80,7 @@ package-mode = false
 version      = "0.0.0"
 
 [tool.poetry.dependencies]
-python = "^3.9.1"
+python = "^3.10"
 
 [tool.poetry.group.build.dependencies]
 maturin = "^1.8.1"
@@ -99,7 +98,7 @@ mdformat-footnote    = "^0.1.1"
 mdformat-frontmatter = "^2.0.8"
 mdformat-gfm         = "^0.3.6"
 mypy                 = "^1.14.1"
-pre-commit           = [{ python = "<3.9", version = "<3.6" }, { python = ">=3.9", version = ">=3.6" }]
+pre-commit           = ">=3.6"
 pylint               = "^3.2"
 pyproject-fmt        = "^2.2.4"
 ruff                 = "^0.8.6"
@@ -237,7 +236,7 @@ load-plugins = "pylint.extensions.mccabe"
 persistent = true
 # Minimum Python version to use for version dependent checks. Will default to the
 # version used to run pylint.
-py-version = "3.9"
+py-version = "3.10"
 # Discover python modules and packages in the file system subtree.
 # recursive =
 # When enabled, pylint would attempt to guess common misconfiguration and emit
@@ -787,7 +786,7 @@ shell = """
 [tool.poe.tasks.test-python-versions]
 help = "Run the test suite in separate virtual environments for each supported Python version"
 shell = """
-  for py in 3.9 3.10 3.11 3.12 3.13; do
+  for py in 3.10 3.11 3.12 3.13; do
     poetry test-py $py
   done
 """

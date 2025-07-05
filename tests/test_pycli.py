@@ -6,7 +6,6 @@ import subprocess
 import sys
 from typing import TYPE_CHECKING
 
-import pytest
 import rich.emoji
 from typer.testing import CliRunner
 
@@ -27,9 +26,7 @@ def test_help() -> None:
     assert 'Usage' in result.stdout
     assert 'Arguments' in result.stdout
     assert 'Options' in result.stdout
-
-    if sys.version_info >= (3, 10):
-        assert 'DICOM Options' in result.stdout
+    assert 'DICOM Options' in result.stdout
 
 
 def test_success(scpserver: str) -> None:
@@ -48,7 +45,6 @@ def test_failure() -> None:
     assert ConnectionError is result.exception.__class__
 
 
-@pytest.mark.skipif(sys.version_info < (3, 10), reason='Does not work on Python 3.9')
 def test_version() -> None:
     """Test the CLI output when the `--version` flag is provided."""
     result = runner.invoke(app, ['--version'])
@@ -58,7 +54,6 @@ def test_version() -> None:
     assert echo.__version__ in result.stdout
 
 
-@pytest.mark.skipif(sys.version_info < (3, 10), reason='Does not work on Python 3.9')
 def test_version_called_as_module() -> None:
     """Test the CLI output when the utility is invoked as a Python module."""
     out = subprocess.check_output([sys.executable, '-m', 'dicom_echo', '--version'], text=True)
