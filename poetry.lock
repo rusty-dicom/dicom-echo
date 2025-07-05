@@ -723,6 +723,18 @@ python-versions = "*"
 version = "0.3.9"
 
 [[package]]
+description = "Distro - an OS platform information API"
+files = [
+  { file = "distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2" },
+  { file = "distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed" },
+]
+groups = ["lint"]
+name = "distro"
+optional = false
+python-versions = ">=3.6"
+version = "1.9.0"
+
+[[package]]
 description = "Pythonic argument parser, that will make you smile"
 files = [
   { file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491" },
@@ -1434,6 +1446,22 @@ benchmark = ["pytest", "pytest-benchmark"]
 dev       = ["black", "flake8", "isort", "pre-commit", "pyproject-flake8"]
 doc       = ["myst-parser", "sphinx", "sphinx-book-theme"]
 test      = ["coverage", "pytest", "pytest-cov"]
+
+[[package]]
+description = "Read settings from config files"
+files = [
+  { file = "maison-2.0.0-py3-none-any.whl", hash = "sha256:e684fbab833f0f049d6e3556a127b8c5abe7cd18620f5b751a483e103dc4cbb5" },
+  { file = "maison-2.0.0.tar.gz", hash = "sha256:f5dafbbf4ce57bdb7cae128e075f457434b2cc9573b4f4bb4535f16d2ebd1cc5" },
+]
+groups = ["lint"]
+name = "maison"
+optional = false
+python-versions = "<4.0.0,>=3.9.1"
+version = "2.0.0"
+
+[package.dependencies]
+click = ">=8.0.1,<9.0.0"
+toml  = ">=0.10.2,<0.11.0"
 
 [[package]]
 description = "Python port of markdown-it. Markdown parsing, done right!"
@@ -3001,6 +3029,25 @@ python-versions = ">=3.7"
 version = "0.8.6"
 
 [[package]]
+description = "ruyaml is a fork of ruamel.yaml"
+files = [
+  { file = "ruyaml-0.91.0-py3-none-any.whl", hash = "sha256:50e0ee3389c77ad340e209472e0effd41ae0275246df00cdad0a067532171755" },
+  { file = "ruyaml-0.91.0.tar.gz", hash = "sha256:6ce9de9f4d082d696d3bde264664d1bcdca8f5a9dff9d1a1f1a127969ab871ab" },
+]
+groups = ["lint"]
+name = "ruyaml"
+optional = false
+python-versions = ">=3.6"
+version = "0.91.0"
+
+[package.dependencies]
+distro     = ">=1.3.0"
+setuptools = ">=39.0"
+
+[package.extras]
+docs = ["Sphinx"]
+
+[[package]]
 description = "Scan dependencies for known vulnerabilities and licenses."
 files = [
   { file = "safety-3.5.2-py3-none-any.whl", hash = "sha256:d5baff410c548393e80ba2bd2ab1de2701a690ca3577e457335917b9db4641e1" },
@@ -3232,6 +3279,18 @@ version = "9.1.2"
 [package.extras]
 doc  = ["reno", "sphinx"]
 test = ["pytest", "tornado (>=4.5)", "typeguard"]
+
+[[package]]
+description = "Python Library for Tom's Obvious, Minimal Language"
+files = [
+  { file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b" },
+  { file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f" },
+]
+groups = ["lint"]
+name = "toml"
+optional = false
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
+version = "0.10.2"
 
 [[package]]
 description = "Common logic to the TOML formatter."
@@ -3535,6 +3594,24 @@ python-versions = "*"
 version = "0.2.13"
 
 [[package]]
+description = "A simple opionated yaml formatter that keeps your comments!"
+files = [
+  { file = "yamlfix-1.17.0-py3-none-any.whl", hash = "sha256:0a510930a3a4f9655ca05a923594f2271849988f33f3c30363d5dee1261b6734" },
+  { file = "yamlfix-1.17.0.tar.gz", hash = "sha256:81d7220b62798d1dda580e1574b3d3d6926701ae8cd79588c4e0b33f2e345d85" },
+]
+groups = ["lint"]
+name = "yamlfix"
+optional = false
+python-versions = ">=3.9.1"
+version = "1.17.0"
+
+[package.dependencies]
+click    = ">=8.1.3"
+maison   = ">=2.0.0"
+pydantic = ">=2.8.2"
+ruyaml   = ">=0.91.0"
+
+[[package]]
 description = "Backport of pathlib-compatible object wrapper for zip files"
 files = [
   { file = "zipp-3.23.0-py3-none-any.whl", hash = "sha256:071652d6115ed432f5ce1d34c336c0adfd6a884660d1e9712a256d3d3bd4b14e" },
@@ -3571,6 +3648,6 @@ test = [
 type = ["pytest-mypy"]
 
 [metadata]
-content-hash    = "889957651cc4d12446cb3455a23b8790d5741d9c585907dcf64d948a9b1c9b92"
+content-hash    = "83f651c2a2dd672f208ec53864ee434fdff92c3b5a90e3c127577977f689aac6"
 lock-version    = "2.1"
 python-versions = "^3.9.1"

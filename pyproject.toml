@@ -107,6 +107,7 @@ pyproject-fmt        = "^2.2.4"
 ruff                 = "^0.8.6"
 safety               = ">=2.3,<4.0"
 shellcheck-py        = { markers = "platform_machine != 'arm64'", version = ">=0.8,<0.11" }
+yamlfix              = "^1.17.0"
 
 [tool.poetry.group.test.dependencies]
 coverage               = { extras = ["toml"], version = ">=6.4,<8.0" }
@@ -780,7 +781,7 @@ args = [{ name = "py", positional = true }]
 help = "Run the test suite in a virtual environment with the specified Python version"
 shell = """
   poetry env use $py
-  poetry install --sync
+  poetry --all-groups --all-extras
   poetry test
 """
 
