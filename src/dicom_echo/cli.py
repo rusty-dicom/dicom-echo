@@ -16,7 +16,7 @@ try:
 
     _ = t.Annotated, t.TypeAlias  # type: ignore[attr-defined]
 except AttributeError:  # pragma: no cover
-    # note: for supporting Python 3.8
+    # note: for supporting Python 3.9
     import typing_extensions as t  # type: ignore[no-redef]
 
 __all__ = ['main', 'version_callback']
@@ -63,6 +63,7 @@ VER: t.TypeAlias = t.Annotated[
         callback=version_callback,
         is_eager=True,
         help='display the version of this program',
+        show_default=False,
     ),
 ]
 
