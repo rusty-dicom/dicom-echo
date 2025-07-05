@@ -671,6 +671,7 @@ poetry_command = ""
 post_build   = "maturin-build"
 post_install = "maturin-develop"
 post_publish = "maturin-upload"
+post_sync    = "maturin-develop"
 
 [tool.poe.tasks]
 _version.cmd = "poetry version --short"
