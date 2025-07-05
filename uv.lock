@@ -292,6 +292,7 @@ name = "dicom-echo"
 source = { editable = "." }
 dependencies = [
     { name = "typer" },
+    { name = "typing-extensions" },
 ]
 
 [package.dev-dependencies]
@@ -329,7 +330,10 @@ test = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "typer", specifier = "~=0.15.0" }]
+requires-dist = [
+    { name = "typer", specifier = "~=0.15.0" },
+    { name = "typing-extensions", specifier = ">=4.14.1" },
+]
 
 [package.metadata.requires-dev]
 build = [{ name = "maturin", specifier = "~=1.8.1" }]

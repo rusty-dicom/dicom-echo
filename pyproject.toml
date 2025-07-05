@@ -33,7 +33,7 @@ test = [
 ]
 
 [project]
-authors = [{ name = "Bryant Finney", email = "bryant.finney@outlook.com" }]
+authors = [{ email = "bryant.finney@outlook.com", name = "Bryant Finney" }]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Developers",
@@ -63,7 +63,7 @@ name            = "dicom-echo"
 readme          = "README.md"
 requires-python = ">=3.9.1,<4"
 
-dependencies = ["typer~=0.15.0"]
+dependencies = ["typer~=0.15.0", "typing-extensions>=4.14.1; python_version < '3.10'"]
 dynamic      = ["version"]
 
 urls.changelog     = "https://github.com/rusty-dicom/dicom-echo/releases"
@@ -83,7 +83,7 @@ version      = "0.0.0"
 [tool.poetry.dependencies]
 python            = "^3.9.1"
 typer             = "^0.15.0"
-typing-extensions = { version = "^4.12.2", python = "<3.9" }
+typing-extensions = { python = "<3.9", version = "^4.12.2" }
 
 [tool.poetry.group.build.dependencies]
 maturin = "^1.8.1"
@@ -101,12 +101,12 @@ mdformat-footnote    = "^0.1.1"
 mdformat-frontmatter = "^2.0.8"
 mdformat-gfm         = "^0.3.6"
 mypy                 = "^1.14.1"
-pre-commit           = [{ version = "<3.6", python = "<3.9" }, { version = ">=3.6", python = ">=3.9" }]
+pre-commit           = [{ python = "<3.9", version = "<3.6" }, { python = ">=3.9", version = ">=3.6" }]
 pylint               = "^3.2"
 pyproject-fmt        = "^2.2.4"
 ruff                 = "^0.8.6"
 safety               = ">=2.3,<4.0"
-shellcheck-py        = { version = ">=0.8,<0.11", markers = "platform_machine != 'arm64'" }
+shellcheck-py        = { markers = "platform_machine != 'arm64'", version = ">=0.8,<0.11" }
 
 [tool.poetry.group.test.dependencies]
 coverage               = { extras = ["toml"], version = ">=6.4,<8.0" }
@@ -128,9 +128,9 @@ vcs   = "git"
 [tool.poetry-dynamic-versioning.substitution]
 files = ["**/__init__.py", "*.py", "*/__version__.py", "*/_version.py", "backend/Cargo.toml"]
 patterns = [
-  { value = """(^__version__\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""", mode = "str" },
-  { value = """(^__version_tuple__\\s*(?::.*?)?=\\s*\\()[^)]*(\\))""", mode = "tuple" },
-  { value = """(^version\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""", mode = "str" },
+  { mode = "str", value = """(^__version__\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""" },
+  { mode = "str", value = """(^version\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""" },
+  { mode = "tuple", value = """(^__version_tuple__\\s*(?::.*?)?=\\s*\\()[^)]*(\\))""" },
 ]
 
 [tool.maturin]
@@ -170,13 +170,13 @@ lint.select = [
   "UP",
   "W",
 ]
-output-format = "full"
-show-fixes = true
-src = ["echoscu", "src", "tests"]
 # Disallow all relative imports.
 lint.flake8-tidy-imports.ban-relative-imports = "all"
 lint.mccabe.max-complexity                    = 5
 lint.pydocstyle.convention                    = "google"
+output-format                                 = "full"
+show-fixes                                    = true
+src                                           = ["echoscu", "src", "tests"]
 
 [tool.pylint.main]
 # Analyse import fallback blocks. This can be used to support both Python 2 and 3
@@ -238,7 +238,7 @@ load-plugins = "pylint.extensions.mccabe"
 persistent = true
 # Minimum Python version to use for version dependent checks. Will default to the
 # version used to run pylint.
-py-version = "3.8"
+py-version = "3.9"
 # Discover python modules and packages in the file system subtree.
 # recursive =
 # When enabled, pylint would attempt to guess common misconfiguration and emit
@@ -787,7 +787,7 @@ shell = """
 [tool.poe.tasks.test-python-versions]
 help = "Run the test suite in separate virtual environments for each supported Python version"
 shell = """
-  for py in 3.8 3.9 3.10 3.11 3.12; do
+  for py in 3.9 3.10 3.11 3.12 3.13; do
     poetry test-py $py
   done
 """
