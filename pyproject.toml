@@ -58,7 +58,7 @@ classifiers = [
 ]
 
 description     = "A lightweight, cross-platform, blazingly fast implementation of the C-ECHO DICOM procedure. 🔥"
-license         = { file = "LICENSE.md" }
+license-files   = ["LICENSE.md"]
 name            = "dicom-echo"
 readme          = "README.md"
 requires-python = ">=3.9.1,<4"
