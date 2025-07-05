@@ -8,6 +8,8 @@ from collections.abc import Iterator
 
 import pytest
 
+# ruff: noqa: PLC0415
+
 
 @pytest.fixture(scope='session')
 def dicom_storescp() -> str:
