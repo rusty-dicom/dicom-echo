@@ -45,7 +45,7 @@ runs:
         path: ~/.cache
         key: ${{ runner.os }}-${{ inputs.python-version }}-${{ steps.poetry.outputs.groups }}
 
-    - run: poetry ${{ inputs.groups && format('install --only {0}', inputs.groups) || 'install'}} --all-extras --sync
+    - run: poetry ${{ inputs.groups && format('sync --only {0}', inputs.groups) || 'sync'}} --all-extras
       shell: sh
 
     # note: 'poetry' is used to run 'poe' tasks because `poetry_command = ""` in 'pyproject.toml'
