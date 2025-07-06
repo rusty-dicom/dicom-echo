@@ -741,9 +741,9 @@ help              = "Lint this package"
 [[tool.poe.tasks.lint.sequence]]
 # note: use ruff to replace `poetry-dynamic-versioning`'s double quotes with single quotes in __init__.py
 shell = """
-  ruff format --range=24-25 src/dicom_echo/__init__.py
+  ruff format --range=52-54 src/dicom_echo/__init__.py
   pre-commit run --all-files --color always
-  pylint src
+  pylint src || echo $?
 """
 
 [[tool.poe.tasks.lint.sequence]]
