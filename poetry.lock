@@ -1525,16 +1525,16 @@ patchelf = ["patchelf"]
 zig      = ["ziglang (>=0.10.0,<0.13.0)"]
 
 [[package]]
-description = "import hook to load rust projects built with maturin"
+description = "Import hook to load rust projects built with maturin"
 files = [
-  { file = "maturin-import-hook-0.1.0.tar.gz", hash = "sha256:b31457d421db2a6aa51a2431a0f343ace17f4f59944a9670f2e6be66b3ea0499" },
-  { file = "maturin_import_hook-0.1.0-py3-none-any.whl", hash = "sha256:05cfeb40a161ec910081914aaf8909498b39b0e06d3edd89fd618b7cee38cceb" },
+  { file = "maturin_import_hook-0.3.0-py3-none-any.whl", hash = "sha256:f5d20b4bc3056d84170dc08fe655160421b28d2b5128b48f55312315cdbb2cfe" },
+  { file = "maturin_import_hook-0.3.0.tar.gz", hash = "sha256:cdd51ce267663c437c4aea1bfd5f7ee5884b54a9d866ea924227d68d758bbba2" },
 ]
 groups = ["dev"]
 name = "maturin-import-hook"
 optional = false
-python-versions = ">=3.8"
-version = "0.1.0"
+python-versions = ">=3.9"
+version = "0.3.0"
 
 [package.dependencies]
 filelock = "*"
@@ -3471,6 +3471,6 @@ pydantic = ">=2.8.2"
 ruyaml   = ">=0.91.0"
 
 [metadata]
-content-hash    = "5a027e939557a6d3247f3c9b1fc5f0dd747151b7e371ff44206131185cab8ecf"
+content-hash    = "404e98cf4a33df0b169508ebc556fed51b8e2b63e8f76e608ccfc417714fbc15"
 lock-version    = "2.1"
 python-versions = "^3.10"
