@@ -4,20 +4,13 @@ from __future__ import annotations
 
 import logging
 import sys
+import typing as t
 from pathlib import Path
 
 import rich
 import typer
 
 import dicom_echo as echo
-
-try:
-    import typing as t
-
-    _ = t.Annotated, t.TypeAlias  # type: ignore[attr-defined]
-except AttributeError:  # pragma: no cover
-    # note: for supporting Python 3.8
-    import typing_extensions as t  # type: ignore[no-redef]
 
 __all__ = ['main', 'version_callback']
 
@@ -63,6 +56,7 @@ VER: t.TypeAlias = t.Annotated[
         callback=version_callback,
         is_eager=True,
         help='display the version of this program',
+        show_default=False,
     ),
 ]
 

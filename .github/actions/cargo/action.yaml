@@ -1,5 +1,7 @@
+---
 name: cargo
 description: Run `cargo` commands for this project
+
 inputs:
   command:
     description: The `cargo` command to run

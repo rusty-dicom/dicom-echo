@@ -1,5 +1,7 @@
+---
 name: setup
 description: Execute steps to set up the project
+
 inputs:
   artifacts:
     description: The path to the artifacts to upload
@@ -11,11 +13,11 @@ inputs:
 
   groups:
     description: Install these dependency groups with poetry
-    default: ""
+    default: ''
 
   python-version:
     description: The version of Python to use
-    default: "3.12"
+    default: '3.12'
 
 outputs:
   artifacts:
@@ -35,9 +37,7 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - id: poetry
-      run: tr -d '\n' <<<"${{ inputs.groups }}" |
-        tr -c '[:alnum:]' '-' |
-        xargs printf 'groups=%s\n' >>"$GITHUB_OUTPUT"
+      run: tr -d '\n' <<<"${{ inputs.groups }}" | tr -c '[:alnum:]' '-' | xargs printf 'groups=%s\n' >>"$GITHUB_OUTPUT"
       shell: bash
 
     - uses: actions/cache@v4
@@ -45,10 +45,7 @@ runs:
         path: ~/.cache
         key: ${{ runner.os }}-${{ inputs.python-version }}-${{ steps.poetry.outputs.groups }}
 
-    - run: poetry
-        ${{ inputs.groups && format('install --only {0}', inputs.groups) || 'install'}}
-        --all-extras
-        --sync
+    - run: poetry ${{ inputs.groups && format('sync --only {0}', inputs.groups) || 'sync'}} --all-extras
       shell: sh
 
     # note: 'poetry' is used to run 'poe' tasks because `poetry_command = ""` in 'pyproject.toml'
@@ -61,10 +58,7 @@ runs:
       if: ${{ inputs.artifacts }}
       env:
         POE_TASK: ${{ inputs.command }}
-      run: printf 'name=%s-%s-py%s\n'
-        "${POE_TASK% *}"
-        "${{ inputs.artifacts }}"
-        "${{ inputs.python-version }}" >>"$GITHUB_OUTPUT"
+      run: printf 'name=%s-%s-py%s\n' "${POE_TASK% *}" "${{ inputs.artifacts }}" "${{ inputs.python-version }}" >>"$GITHUB_OUTPUT"
       shell: sh
 
     - if: ${{ inputs.artifacts }}
