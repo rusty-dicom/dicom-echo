@@ -150,7 +150,7 @@ jobs:
   build:
     # ref: https://github.com/pydantic/pydantic-core/blob/ba8eab4acba8ad04c45f27a58a5d001c8f212361/.github/workflows/ci.yml#L395-L499
     env:
-      INTERPRETER: ${{ matrix.interpreter || '3.10 3.11 3.12 3.13 pypy3.10 pypy3.11' }}
+      INTERPRETER: ${{ matrix.interpreter || '3.10 3.11 3.12 3.13 pypy3.9 pypy3.10' }}
       MANY_LINUX: ${{ contains('linux', matrix.os) && ( matrix.manylinux || 'auto' ) || null }}
       OS: ${{ matrix.os || 'linux' }}
 
@@ -174,9 +174,9 @@ jobs:
         include:
           # manylinux for various platforms
           - {os: linux, target: i686}
-          - {os: linux, target: armv7, interpreter: 3.10 3.11 3.12 3.13  pypy3.10 pypy3.11}
-          - {os: linux, target: ppc64le, interpreter: 3.10 3.11 3.12 3.13  pypy3.10 pypy3.11}
-          - {os: linux, target: s390x, interpreter: 3.10 3.11 3.12 3.13  pypy3.10 pypy3.11}
+          - {os: linux, target: armv7, interpreter: 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10}
+          - {os: linux, target: ppc64le, interpreter: 3.10 3.11 3.12 3.13  pypy3.9 pypy3.10}
+          - {os: linux, target: s390x, interpreter: 3.10 3.11 3.12 3.13  pypy3.9 pypy3.10}
 
           # windows
           # TODO: build py3.13
