@@ -12,7 +12,7 @@ name       = "backend"
 [dependencies]
 dicom-core                     = "0.7.1"
 dicom-dictionary-std           = "0.7.0"
-dicom-object                   = "0.7.1"
+dicom-object                   = "0.8.1"
 dicom-transfer-syntax-registry = "0.7.1"
 dicom-ul                       = "0.7.1"
 pyo3                           = "0.22.0"
