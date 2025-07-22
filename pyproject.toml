@@ -86,7 +86,7 @@ python = "^3.10"
 maturin = "^1.8.1"
 
 [tool.poetry.group.dev.dependencies]
-ipykernel           = "^6.29.5"
+ipykernel           = "^6.30.0"
 maturin-import-hook = "^0.3.0"
 pdoc                = "^14.7.0"
 pynvim              = "^0.5.2"
