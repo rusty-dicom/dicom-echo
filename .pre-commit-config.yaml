@@ -121,13 +121,6 @@ repos:
 
   - repo: local
     hooks:
-      - id: poetry-check
-        name: poetry check
-        entry: poetry check
-        language: system
-        files: pyproject.toml
-        pass_filenames: false
-
       - id: check-poetry-lock
         always_run: true
         language: system
