@@ -28,7 +28,7 @@ test = [
   "pytest-cov>=3,<6",
   "pytest-error-for-skips~=2.0.2",
   "pytest-mock~=3.8",
-  "pytest>=7.4.4,<9.0.0",
+  "pytest>=7.4.4,<10.0.0",
   "semver~=3.0.2",
 ]
 
