@@ -6,18 +6,19 @@ requires      = ["maturin>=1.7,<2", "poetry-dynamic-versioning"]
 # https://packaging.python.org/en/latest/specifications/dependency-groups/
 build = ["maturin~=1.8.1"]
 
-dev = ["ipykernel~=6.29.5", "maturin-import-hook~=0.1.0", "pdoc~=14.7.0", "pynvim~=0.5.2", "pytest-watch~=4.2.0"]
+dev = ["ipykernel~=6.29.5", "maturin-import-hook~=0.3.0", "pdoc~=14.7.0", "pynvim~=0.5.2", "pytest-watch~=4.2.0"]
 
 lint = [
   "anybadge~=1.15",
   "mdformat-footnote~=0.1.1",
   "mdformat-frontmatter~=2.0.8",
-  "mdformat-gfm~=0.3.6",
-  "mypy~=1.14.1",
+  "mdformat-gfm~=0.4.1",
+  "mypy~=1.17.0",
   "pre-commit>=3.6",
   "pylint~=3.2",
   "pyproject-fmt~=2.2.4",
-  "ruff~=0.8.6",
+  "ruff~=0.12.3",
+  "safety>=2.3,<4.0",
   "shellcheck-py>=0.8,<0.11; platform_machine != 'arm64'",
   "yamlfix~=1.17.0",
 ]
