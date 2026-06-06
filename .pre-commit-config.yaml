@@ -49,9 +49,10 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.12.2
     hooks:
-      - id: ruff
+      - id: ruff-check
         types_or: [python, pyi, jupyter, toml]
         args: [--verbose]
+        exclude: \.lock$
 
       - id: ruff-format
         types_or: [python, pyi, jupyter]
