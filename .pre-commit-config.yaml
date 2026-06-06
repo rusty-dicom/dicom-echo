@@ -82,6 +82,9 @@ repos:
     rev: v0.9.3
     hooks:
       - id: taplo-format
+      - id: taplo-lint
+        # FIXME: https://github.com/tamasfe/taplo/issues/799 (is closed but regressed, 2026-06-06)
+        args: [--no-schema]
 
   - repo: https://github.com/RobertCraigie/pyright-python
     rev: v1.1.402
