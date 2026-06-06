@@ -41,7 +41,6 @@ classifiers = [
   "Intended Audience :: Healthcare Industry",
   "Intended Audience :: Science/Research",
   "Intended Audience :: System Administrators",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
@@ -58,6 +57,7 @@ classifiers = [
 ]
 
 description     = "A lightweight, cross-platform, blazingly fast implementation of the C-ECHO DICOM procedure. 🔥"
+license         = "MIT"
 license-files   = ["LICENSE.md"]
 name            = "dicom-echo"
 readme          = "README.md"
@@ -76,45 +76,11 @@ urls.source        = "https://github.com/rusty-dicom/dicom-echo"
 scripts.dicom-echo = "dicom_echo.cli:app"
 
 [tool.poetry]
-name         = "dicom-echo"
 package-mode = false
 version      = "0.0.0"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-
-[tool.poetry.group.build.dependencies]
-maturin = "^1.8.1"
-
-[tool.poetry.group.dev.dependencies]
-ipykernel           = "^6.29.5"
-maturin-import-hook = "^0.3.0"
-pdoc                = "^14.7.0"
-pynvim              = "^0.5.2"
-pytest-watch        = "^4.2.0"
-
-[tool.poetry.group.lint.dependencies]
-anybadge             = "^1.15"
-mdformat-footnote    = "^0.1.1"
-mdformat-frontmatter = "^2.0.8"
-mdformat-gfm         = "^0.4.1"
-mypy                 = "^1.17.0"
-pre-commit           = ">=3.6"
-pylint               = "^3.2"
-pyproject-fmt        = "^2.2.4"
-ruff                 = "^0.12.3"
-safety               = ">=2.3,<4.0"
-shellcheck-py        = { markers = "platform_machine != 'arm64'", version = ">=0.8,<0.11" }
-yamlfix              = "^1.17.0"
-
-[tool.poetry.group.test.dependencies]
-coverage               = { extras = ["toml"], version = ">=6.4,<8.0" }
-pytest                 = ">=7.4.4,<9.0.0"
-pytest-clarity         = "^1.0.1"
-pytest-cov             = ">=3,<6"
-pytest-error-for-skips = "^2.0.2"
-pytest-mock            = "^3.8"
-semver                 = "^3.0.2"
 
 [tool.poetry-dynamic-versioning]
 # url: https://github.com/mtkennerly/poetry-dynamic-versioning?tab=readme-ov-file#configuration
