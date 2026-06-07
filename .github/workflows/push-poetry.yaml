@@ -194,6 +194,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
+          architecture: ${{ matrix.python-architecture || 'x64' }}
 
       - uses: ./.github/actions/poetry
         with: {artifacts: '', command: setup-versioning, groups: build}
