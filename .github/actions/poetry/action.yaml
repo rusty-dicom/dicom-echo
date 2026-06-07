@@ -48,7 +48,8 @@ runs:
     - uses: actions/cache@v4
       with:
         path: ~/.cache
-        key: ${{ runner.os }}-${{ inputs.python-version }}-${{ steps.poetry.outputs.groups }}
+        key: |-
+          ${{ runner.os }}-${{ inputs.python-version }}-${{ inputs.python-architecture }}-${{ steps.poetry.outputs.groups }}
 
     - run: poetry ${{ inputs.groups && format('sync --only {0}', inputs.groups) || 'sync'}} --all-extras
       shell: sh
