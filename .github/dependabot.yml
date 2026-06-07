@@ -1,30 +1,35 @@
 ---
 version: 2
 
-updates:
-  - commit-message:
+multi-ecosystem-groups:
+  daily:
+    open-pull-requests-limit: 10
+    commit-message:
       prefix: deps
       prefix-development: chore(dev-deps)
-    directory: /
-    open-pull-requests-limit: 10
-    package-ecosystem: pip
-    reviewers: [bryant-finney]
-    rebase-strategy: auto
     schedule:
       interval: daily
 
-  - commit-message:
-      prefix: deps
-      prefix-development: chore(dev-deps)
-    directory: /
-    open-pull-requests-limit: 10
-    package-ecosystem: cargo
-    reviewers: [bryant-finney]
+updates:
+  - directory: /
+    package-ecosystem: pip
+    patterns: ['*']
     rebase-strategy: auto
-    schedule:
-      interval: daily
+    multi-ecosystem-group: daily
+
+  - directory: /
+    package-ecosystem: uv
+    patterns: ['*']
+    rebase-strategy: auto
+    multi-ecosystem-group: daily
+
+  - directory: /
+    multi-ecosystem-group: daily
+    package-ecosystem: cargo
+    patterns: ['*']
+    rebase-strategy: auto
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
