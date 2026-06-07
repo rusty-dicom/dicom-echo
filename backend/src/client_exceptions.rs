@@ -1,11 +1,11 @@
-//! Map [`dicom_ul::association::client::Error`] to Python exceptions.
+//! Map [`dicom_ul::association::Error`] to Python exceptions.
 //!
 //! Reference: [Foreign Rust error types | Error handling — PyO3 user guide]
 //!
-//! [`dicom_ul::association::client::Error`]: dicom_ul::association::client::Error
+//! [`dicom_ul::association::Error`]: dicom_ul::association::Error
 //! [Foreign Rust error types | Error handling — PyO3 user guide]: https://pyo3.rs/v0.22.2/function/error-handling#foreign-rust-error-types
 
-use dicom_ul::association::client::Error as ClientError;
+use dicom_ul::association::Error as ClientError;
 
 use pyo3::exceptions::{PyConnectionError, PyValueError};
 use pyo3::PyErr;
