@@ -5,7 +5,7 @@ default_stages: [pre-commit, manual]
 fail_fast: false
 
 ci:
-  skip: [cargo-fmt, check-poetry-lock, pyright, shellcheck, poetry-check]
+  skip: [cargo-fmt, check-poetry-lock, pyright, shellcheck]
 
 repos:
   - repo: https://github.com/pre-commit/pygrep-hooks
