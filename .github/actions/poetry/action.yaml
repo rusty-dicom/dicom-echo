@@ -19,6 +19,10 @@ inputs:
     description: The version of Python to use
     default: '3.12'
 
+  python-architecture:
+    description: The architecture of Python to use
+    default: x64
+
 outputs:
   artifacts:
     description: The name of the build artifacts this action publishes to GitHub
@@ -35,6 +39,7 @@ runs:
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
+        architecture: ${{ inputs.python-architecture }}
 
     - id: poetry
       run: tr -d '\n' <<<"${{ inputs.groups }}" | tr -c '[:alnum:]' '-' | xargs printf 'groups=%s\n' >>"$GITHUB_OUTPUT"

@@ -197,10 +197,18 @@ jobs:
           architecture: ${{ matrix.python-architecture || 'x64' }}
 
       - uses: ./.github/actions/poetry
-        with: {artifacts: '', command: setup-versioning, groups: build}
+        with:
+          artifacts: ''
+          command: setup-versioning
+          groups: build
+          python-architecture: ${{ matrix.python-architecture || 'x64' }}
 
       - uses: ./.github/actions/poetry
-        with: {artifacts: '', command: dynamic-versioning, groups: build}
+        with:
+          artifacts: ''
+          command: dynamic-versioning
+          groups: build
+          python-architecture: ${{ matrix.python-architecture || 'x64' }}
 
       - uses: PyO3/maturin-action@v1
         with:
