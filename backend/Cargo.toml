@@ -1,7 +1,7 @@
 [package]
 edition = "2021"
 name    = "dicom-echo"
-version = "0.2.3-post.97+73011d8"
+version = "0.0.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

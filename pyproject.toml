@@ -91,7 +91,7 @@ style = "semver"
 vcs   = "git"
 
 [tool.poetry-dynamic-versioning.substitution]
-files = ["**/__init__.py", "*.py", "*/__version__.py", "*/_version.py", "backend/Cargo.toml"]
+files = ["backend/Cargo.toml", "src/**/__init__.py"]
 patterns = [
   { mode = "str", value = """(^__version__\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""" },
   { mode = "str", value = """(^version\\s*(?::.*?)?=\\s*['"])[^'"]*(['"])""" },

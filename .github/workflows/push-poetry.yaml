@@ -82,7 +82,6 @@ jobs:
           commit: false
           github_token: ${{ github.token }}
           prerelease: true
-          root_options: --strict -vv
 
   docs:
     if: needs.check.outputs.release != 'true'
@@ -174,9 +173,9 @@ jobs:
         include:
           # manylinux for various platforms
           - {os: linux, target: i686}
-          - {os: linux, target: armv7, interpreter: 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10}
-          - {os: linux, target: ppc64le, interpreter: 3.10 3.11 3.12 3.13  pypy3.9 pypy3.10}
-          - {os: linux, target: s390x, interpreter: 3.10 3.11 3.12 3.13  pypy3.9 pypy3.10}
+          - {os: linux, target: armv7}
+          - {os: linux, target: ppc64le}
+          - {os: linux, target: s390x}
 
           # windows
           # TODO: build py3.13
@@ -186,6 +185,18 @@ jobs:
           - {os: windows, target: x64, interpreter: 3.10 3.11 3.12}
 
     steps:
+      - id: reformat
+        run: |
+          import os
+
+          interpreter_versions = os.environ['INTERPRETER'].split(' ')
+          content = '\n'.join(['newlines<<EOF', *interpreter_versions, 'EOF\n'])
+          print(content)
+
+          with open(os.environ['GITHUB_OUTPUT'], 'w', encoding='utf-8') as f:
+            f.write(content)
+        shell: python
+
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
@@ -193,22 +204,13 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: 3.x
+          python-version: |
+            ${{ steps.reformat.outputs.newlines }}
           architecture: ${{ matrix.python-architecture || 'x64' }}
 
-      - uses: ./.github/actions/poetry
-        with:
-          artifacts: ''
-          command: setup-versioning
-          groups: build
-          python-architecture: ${{ matrix.python-architecture || 'x64' }}
+      - uses: astral-sh/setup-uv@v8.1.0
 
-      - uses: ./.github/actions/poetry
-        with:
-          artifacts: ''
-          command: dynamic-versioning
-          groups: build
-          python-architecture: ${{ matrix.python-architecture || 'x64' }}
+      - run: uvx --isolated poetry-dynamic-versioning
 
       - uses: PyO3/maturin-action@v1
         with:
