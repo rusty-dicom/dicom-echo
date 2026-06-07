@@ -154,23 +154,23 @@ jobs:
       OS: ${{ matrix.os || 'linux' }}
 
     name: build ${{ matrix.os }} ${{ matrix.manylinux }} ${{ matrix.target }}
-    runs-on: ${{ contains('linux', matrix.os) && 'ubuntu' || matrix.os }}-latest
+    runs-on: |
+      ${{ contains('linux', matrix.os) && 'ubuntu' || matrix.os }}${{ contains(fromJSON('["linux", "macos", "windows"]'), matrix.os) && '-latest' || '' }}
     strategy:
       fail-fast: false
       matrix:
-        os: [macos, linux]  # default: linux
+        os: [linux]  # default: linux
         manylinux: [auto, musllinux_1_1, musllinux_1_2]  # default: 'auto' if linux, or 'null' otherwise
         python-architecture: [x64] # default: 'x64'
         target: [x86_64, aarch64]
 
         # prettier-ignore
-        exclude:
-          - {os: macos, manylinux: musllinux_1_1}
-          - {os: macos, manylinux: musllinux_1_2}
-          - {os: windows, target: aarch64}
-
-        # prettier-ignore
         include:
+          # macos-latest resolves to arm64 now
+          - {os: macos, python-architecture: arm64, target: aarch64}
+          - {os: macos, python-architecture: arm64, target: universal2}
+          - {os: macos-26-intel, python-architecture: x64, target: x86_64}
+
           # manylinux for various platforms
           - {os: linux, target: i686}
           - {os: linux, target: armv7}
