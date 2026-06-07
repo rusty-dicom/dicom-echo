@@ -15,7 +15,9 @@ from dicom_echo.cli import app, command
 if TYPE_CHECKING:  # pragma: no cover
     from unittest.mock import MagicMock
 
-runner = CliRunner()
+ENV_OVERRIDES = {'NO_COLOR': '1', 'TERM': 'dumb'}
+
+runner = CliRunner(env=ENV_OVERRIDES)
 
 
 def test_help() -> None:
@@ -56,7 +58,7 @@ def test_version() -> None:
 
 def test_version_called_as_module() -> None:
     """Test the CLI output when the utility is invoked as a Python module."""
-    out = subprocess.check_output([sys.executable, '-m', 'dicom_echo', '--version'], text=True)
+    out = subprocess.check_output([sys.executable, '-m', 'dicom_echo', '--version'], text=True, env=ENV_OVERRIDES)
 
     assert 'dicom_echo' in out
     assert echo.__version__ in out
