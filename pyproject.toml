@@ -4,12 +4,12 @@ requires      = ["maturin>=1.7,<2", "poetry-dynamic-versioning"]
 
 [dependency-groups]
 # https://packaging.python.org/en/latest/specifications/dependency-groups/
-build = ["maturin~=1.8.1"]
+build = ["maturin~=1.9.1"]
 
-dev = ["ipykernel~=6.29.5", "maturin-import-hook~=0.3.0", "pdoc~=14.7.0", "pynvim~=0.5.2", "pytest-watch~=4.2.0"]
+dev = ["ipykernel~=6.30.0", "maturin-import-hook~=0.3.0", "pdoc~=15.0.4", "pynvim~=0.5.2", "pytest-watch~=4.2.0"]
 
 lint = [
-  "anybadge~=1.15",
+  "anybadge~=1.16",
   "mdformat-footnote~=0.1.1",
   "mdformat-frontmatter~=2.0.8",
   "mdformat-gfm~=0.4.1",
@@ -17,7 +17,7 @@ lint = [
   "pre-commit>=3.6",
   "pylint~=3.2",
   "pyproject-fmt~=2.2.4",
-  "ruff~=0.12.3",
+  "ruff~=0.12.4",
   "safety>=2.3,<4.0",
   "shellcheck-py>=0.8,<0.11; platform_machine != 'arm64'",
   "yamlfix~=1.17.0",
@@ -26,11 +26,11 @@ lint = [
 test = [
   "coverage[toml]>=6.4,<8.0",
   "pytest-clarity~=1.0.1",
-  "pytest-cov>=3,<6",
+  "pytest-cov>=3,<7",
   "pytest-error-for-skips~=2.0.2",
   "pytest-mock~=3.8",
-  "pytest>=7.4.4,<9.0.0",
-  "semver~=3.0.2",
+  "pytest>=7.4.4,<10.0.0",
+  "semver~=3.0.4",
 ]
 
 [project]
