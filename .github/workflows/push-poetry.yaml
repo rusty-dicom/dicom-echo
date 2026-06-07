@@ -20,7 +20,7 @@ jobs:
   test:
     strategy:
       matrix:
-        py: ['3.10', '3.11', '3.12', '3.13']
+        py: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     runs-on: ubuntu-latest
     steps:
@@ -149,7 +149,8 @@ jobs:
   build:
     # ref: https://github.com/pydantic/pydantic-core/blob/ba8eab4acba8ad04c45f27a58a5d001c8f212361/.github/workflows/ci.yml#L395-L499
     env:
-      INTERPRETER: ${{ matrix.interpreter || '3.10 3.11 3.12 3.13 pypy3.9 pypy3.10' }}
+      #  TODO: build for pypy3.12
+      INTERPRETER: ${{ matrix.interpreter || '3.10 3.11 3.12 3.13 3.14 pypy3.11' }}
       MANY_LINUX: ${{ contains('linux', matrix.os) && ( matrix.manylinux || 'auto' ) || null }}
       OS: ${{ matrix.os || 'linux' }}
 
@@ -178,11 +179,10 @@ jobs:
           - {os: linux, target: s390x}
 
           # windows
-          # TODO: build py3.13
-          - {os: windows, target: i686, interpreter: 3.10 3.11 3.12, python-architecture: x86}
-          - {os: windows, target: x86, interpreter: 3.10 3.11 3.12, python-architecture: x86}
-          - {os: windows, target: x86_64, interpreter: 3.10 3.11 3.12}
-          - {os: windows, target: x64, interpreter: 3.10 3.11 3.12}
+          - {os: windows, target: i686, interpreter: 3.10 3.11 3.12 3.13 3.14, python-architecture: x86}
+          - {os: windows, target: x86, interpreter: 3.10 3.11 3.12 3.13 3.14, python-architecture: x86}
+          - {os: windows, target: x86_64, interpreter: 3.10 3.11 3.12 3.13 3.14}
+          - {os: windows, target: x64, interpreter: 3.10 3.11 3.12 3.13 3.14}
 
     steps:
       - id: reformat

@@ -746,14 +746,14 @@ args = [{ name = "py", positional = true }]
 help = "Run the test suite in a virtual environment with the specified Python version"
 shell = """
   poetry env use $py
-  poetry --all-groups --all-extras
+  poetry sync --all-groups --all-extras
   poetry test
 """
 
 [tool.poe.tasks.test-python-versions]
 help = "Run the test suite in separate virtual environments for each supported Python version"
 shell = """
-  for py in 3.10 3.11 3.12 3.13; do
+  for py in 3.10 3.11 3.12 3.13 3.14; do
     poetry test-py $py
   done
 """
