@@ -47,7 +47,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.16
+    rev: v0.15.20
     hooks:
       - id: ruff-check
         types_or: [python, pyi, jupyter, toml]
@@ -88,7 +88,7 @@ repos:
         args: [--no-schema]
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.410
+    rev: v1.1.411
     hooks:
       - id: pyright
         additional_dependencies: [pytest, pytest_mock, semver, typer, typing-extensions]
@@ -105,7 +105,7 @@ repos:
         additional_dependencies: [mdformat-gfm, mdformat-frontmatter, mdformat-footnote]
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.48.0
+    rev: v0.49.0
     hooks:
       - id: markdownlint-fix
         args: [--disable, MD013]
